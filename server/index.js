@@ -2,12 +2,21 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mysql from "mysql2/promise";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import prisma from "./prisma/client.js";
 
 // Load environment variables from .env
 dotenv.config();
+
+// Validate JWT_SECRET
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
+  console.error("❌ ERROR: JWT_SECRET is required in production!");
+  process.exit(1);
+}
+if (!process.env.JWT_SECRET) {
+  console.warn("⚠️  WARNING: JWT_SECRET not set. Using default (unsafe for production)");
+}
 
 // Initialize express app
 const app = express();
@@ -16,21 +25,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MySQL connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error("Database connection failed:", err);
-    return;
-  }
-  console.log("Connected to MySQL Database!");
-});
+// Test database connection (Prisma connects automatically on first query)
+// This is a test to verify connection works
+prisma.$connect()
+  .then(() => {
+    console.log("✅ Prisma Client initialized and ready!");
+    prisma.$disconnect(); // Disconnect test connection, Prisma will reconnect on first query
+  })
+  .catch((err) => {
+    console.error("❌ Database connection failed:", err.message);
+    console.error("Please check your DATABASE_URL in .env file");
+  });
 
 // Example route
 app.get("/", (req, res) => {
@@ -52,53 +57,48 @@ app.post("/api/auth/signup", async (req, res) => {
     }
 
     // Check if user already exists
-    const checkUserQuery = "SELECT * FROM users WHERE email = ?";
-    db.query(checkUserQuery, [email], async (err, results) => {
-      if (err) {
-        console.error("Database error:", err);
-        return res.status(500).json({ message: "Database error" });
-      }
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-      if (results.length > 0) {
-        return res.status(400).json({ message: "User already exists" });
-      }
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Insert new user
-      const insertQuery =
-        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-      db.query(
-        insertQuery,
-        [name, email, hashedPassword],
-        (err, result) => {
-          if (err) {
-            console.error("Database error:", err);
-            return res.status(500).json({ message: "Database error" });
-          }
+    // Create new user
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
 
-          // Generate JWT token
-          const token = jwt.sign(
-            { userId: result.insertId, email },
-            process.env.JWT_SECRET || "your-secret-key",
-            { expiresIn: "7d" }
-          );
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET || "your-secret-key",
+      { expiresIn: "7d" }
+    );
 
-          res.status(201).json({
-            message: "User created successfully",
-            token,
-            user: {
-              id: result.insertId,
-              name,
-              email,
-            },
-          });
-        }
-      );
+    res.status(201).json({
+      message: "User created successfully",
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (error) {
     console.error("Signup error:", error);
+    // Handle Prisma unique constraint error
+    if (error.code === 'P2002') {
+      return res.status(400).json({ message: "User already exists" });
+    }
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -116,41 +116,35 @@ app.post("/api/auth/login", async (req, res) => {
     }
 
     // Find user
-    const query = "SELECT * FROM users WHERE email = ?";
-    db.query(query, [email], async (err, results) => {
-      if (err) {
-        console.error("Database error:", err);
-        return res.status(500).json({ message: "Database error" });
-      }
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-      if (results.length === 0) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-      const user = results[0];
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-      // Verify password
-      const isValidPassword = await bcrypt.compare(password, user.password);
-      if (!isValidPassword) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET || "your-secret-key",
+      { expiresIn: "7d" }
+    );
 
-      // Generate JWT token
-      const token = jwt.sign(
-        { userId: user.id, email: user.email },
-        process.env.JWT_SECRET || "your-secret-key",
-        { expiresIn: "7d" }
-      );
-
-      res.json({
-        message: "Login successful",
-        token,
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        },
-      });
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (error) {
     console.error("Login error:", error);
