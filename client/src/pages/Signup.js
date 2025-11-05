@@ -51,9 +51,19 @@ export default function Signup() {
       // Redirect to dashboard
       navigate('/dashboard');
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Signup failed. Please try again.'
-      );
+      console.error('Signup error:', err);
+      
+      // More detailed error messages
+      if (err.response) {
+        // Server responded with error
+        setError(err.response?.data?.message || 'Server error. Please try again.');
+      } else if (err.request) {
+        // Request was made but no response received
+        setError('Cannot connect to server. Please check your connection or contact support.');
+      } else {
+        // Something else happened
+        setError('An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -62,7 +72,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ink-50 via-brand-50/20 to-ink-50 dark:from-ink-900 dark:via-ink-900 dark:to-ink-800 px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Logo and Header */}
+
         <div className="text-center mb-8 animate-subtleIn">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-start to-brand-end shadow-soft" />
@@ -78,17 +88,14 @@ export default function Signup() {
           </p>
         </div>
 
-        {/* Signup Card */}
         <div className="card animate-subtleIn-delay">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Error Message */}
             {error && (
               <div className="rounded-xl bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 px-4 py-3 text-sm text-rose-700 dark:text-rose-300">
                 {error}
               </div>
             )}
 
-            {/* Name */}
             <div>
               <label
                 htmlFor="name"
@@ -108,7 +115,6 @@ export default function Signup() {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -128,7 +134,6 @@ export default function Signup() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -152,7 +157,6 @@ export default function Signup() {
               </p>
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label
                 htmlFor="confirmPassword"
@@ -172,7 +176,6 @@ export default function Signup() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -223,3 +226,4 @@ export default function Signup() {
     </div>
   );
 }
+

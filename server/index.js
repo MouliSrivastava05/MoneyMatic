@@ -11,11 +11,11 @@ dotenv.config();
 
 // Validate JWT_SECRET
 if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
-  console.error("❌ ERROR: JWT_SECRET is required in production!");
+  console.error(" ERROR: JWT_SECRET is required in production!");
   process.exit(1);
 }
 if (!process.env.JWT_SECRET) {
-  console.warn("⚠️  WARNING: JWT_SECRET not set. Using default (unsafe for production)");
+  console.warn("WARNING: JWT_SECRET not set. Using default (unsafe for production)");
 }
 
 // Initialize express app
@@ -29,11 +29,11 @@ app.use(cors());
 // This is a test to verify connection works
 prisma.$connect()
   .then(() => {
-    console.log("✅ Prisma Client initialized and ready!");
+    console.log("Prisma Client initialized and ready!");
     prisma.$disconnect(); // Disconnect test connection, Prisma will reconnect on first query
   })
   .catch((err) => {
-    console.error("❌ Database connection failed:", err.message);
+    console.error("Database connection failed:", err.message);
     console.error("Please check your DATABASE_URL in .env file");
   });
 
@@ -80,8 +80,7 @@ app.post("/api/auth/signup", async (req, res) => {
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || "your-secret-key",
-      { expiresIn: "7d" }
+      process.env.JWT_SECRET
     );
 
     res.status(201).json({
@@ -95,11 +94,26 @@ app.post("/api/auth/signup", async (req, res) => {
     });
   } catch (error) {
     console.error("Signup error:", error);
-    // Handle Prisma unique constraint error
     if (error.code === 'P2002') {
       return res.status(400).json({ message: "User already exists" });
     }
-    res.status(500).json({ message: "Server error" });
+    if (error.code === 'P1001') {
+      console.error("Database connection failed - check Aiven service status");
+      return res.status(503).json({ 
+        message: "Database connection failed. Please check server logs." 
+      });
+    }
+    console.error("Full error details:", {
+      code: error.code,
+      message: error.message,
+      meta: error.meta
+    });
+    res.status(500).json({ 
+      message: "Server error",
+      ...(process.env.NODE_ENV === 'development' && { 
+        error: error.message 
+      })
+    });
   }
 });
 
@@ -148,7 +162,26 @@ app.post("/api/auth/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Server error" });
+    // Handle database connection errors
+    if (error.code === 'P1001') {
+      console.error("Database connection failed - check Aiven service status");
+      return res.status(503).json({ 
+        message: "Database connection failed. Please check server logs." 
+      });
+    }
+    // More detailed error logging
+    console.error("Full error details:", {
+      code: error.code,
+      message: error.message,
+      meta: error.meta
+    });
+    res.status(500).json({ 
+      message: "Server error",
+      // Only include error details in development
+      ...(process.env.NODE_ENV === 'development' && { 
+        error: error.message 
+      })
+    });
   }
 });
 

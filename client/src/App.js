@@ -1,11 +1,9 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 
-// Home/Landing Page Component
 function Home() {
   const navigate = useNavigate();
 
@@ -73,7 +71,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Content cards */}
       <section className="mx-auto max-w-6xl px-4 pb-20 grid gap-6 md:grid-cols-3">
         {["Smart Budgets", "Search & Filter", "Reminders"].map((title, i) => (
           <div key={i} className="card hover:shadow-glow transition-shadow">

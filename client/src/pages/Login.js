@@ -35,9 +35,19 @@ export default function Login() {
       // Redirect to dashboard
       navigate('/dashboard');
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Login failed. Please check your credentials.'
-      );
+      console.error('Login error:', err);
+      
+      // More detailed error messages
+      if (err.response) {
+        // Server responded with error
+        setError(err.response?.data?.message || 'Server error. Please try again.');
+      } else if (err.request) {
+        // Request was made but no response received
+        setError('Cannot connect to server. Please check your connection or contact support.');
+      } else {
+        // Something else happened
+        setError('An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -163,3 +173,4 @@ export default function Login() {
     </div>
   );
 }
+
