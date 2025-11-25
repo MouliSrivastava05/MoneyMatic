@@ -27,7 +27,7 @@ model Transaction {
   amount      Decimal  @db.Decimal(10, 2)
   category    String   @db.VarChar(100)
   description String?  @db.VarChar(255)
-  date        DateTime @db.DateTime
+  date        DateTime @db.DateTime(0)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
