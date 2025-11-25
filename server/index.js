@@ -22,14 +22,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Test database connection
 prisma.$connect()
   .then(() => {
-    console.log("Prisma Client initialized and ready!");
-    prisma.$disconnect();
+    console.log("✓ Database connected successfully!");
   })
   .catch((err) => {
-    console.error("Database connection failed:", err.message);
-    console.error("Please check your DATABASE_URL in .env file");
+    console.error("✗ Database connection failed:", err.message);
+    console.error("  Please check your DATABASE_URL in .env file");
   });
 
 app.get("/", (req, res) => {

@@ -1,18 +1,9 @@
 import React from 'react';
 
-const categories = [
-  'Food & Dining',
-  'Shopping',
-  'Transportation',
-  'Bills & Utilities',
-  'Entertainment',
-  'Healthcare',
-  'Education',
-  'Travel',
-  'Salary',
-  'Freelance',
-  'Investment',
-  'Other',
+const categories = ['Food & Dining', 'Shopping', 'Transportation',
+  'Bills & Utilities', 'Entertainment', 'Healthcare',
+  'Education', 'Travel', 'Salary', 'Freelance',
+  'Investment','Other',
 ];
 
 export default function TransactionModal({
@@ -29,9 +20,16 @@ export default function TransactionModal({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-ink-900 dark:text-ink-100">
-            {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
-          </h2>
+          <div>
+            <h2 className="text-2xl font-bold text-ink-900 dark:text-ink-100">
+              {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
+            </h2>
+            {editingTransaction && (
+              <p className="text-sm text-ink-500 dark:text-ink-400 mt-1">
+                You can change the type (Income/Expense) and all other fields
+              </p>
+            )}
+          </div>
           <button
             onClick={onClose}
             className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300"
@@ -44,34 +42,56 @@ export default function TransactionModal({
           {/* Type */}
           <div>
             <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Type
+              Transaction Type
+              {editingTransaction && (
+                <span className="ml-2 text-xs text-ink-500 dark:text-ink-400">
+                  (Click to change)
+                </span>
+              )}
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => onFormChange('type', 'income')}
-                className={`p-3 rounded-xl border-2 transition-all ${
+                className={`p-4 rounded-xl border-2 transition-all ${
                   formData.type === 'income'
-                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                    : 'border-ink-200 dark:border-ink-700'
+                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-md'
+                    : 'border-ink-200 dark:border-ink-700 hover:border-emerald-300 dark:hover:border-emerald-700'
                 }`}
               >
-                <div className="text-2xl mb-1">💰</div>
-                <div className="font-medium text-sm">Income</div>
+                <div className="text-3xl mb-2">💰</div>
+                <div className="font-semibold text-sm">Income</div>
+                {formData.type === 'income' && (
+                  <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
+                    Selected
+                  </div>
+                )}
               </button>
               <button
                 type="button"
                 onClick={() => onFormChange('type', 'expense')}
-                className={`p-3 rounded-xl border-2 transition-all ${
+                className={`p-4 rounded-xl border-2 transition-all ${
                   formData.type === 'expense'
-                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20'
-                    : 'border-ink-200 dark:border-ink-700'
+                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 shadow-md'
+                    : 'border-ink-200 dark:border-ink-700 hover:border-rose-300 dark:hover:border-rose-700'
                 }`}
               >
-                <div className="text-2xl mb-1">💸</div>
-                <div className="font-medium text-sm">Expense</div>
+                <div className="text-3xl mb-2">💸</div>
+                <div className="font-semibold text-sm">Expense</div>
+                {formData.type === 'expense' && (
+                  <div className="text-xs text-rose-600 dark:text-rose-400 mt-1">
+                    Selected
+                  </div>
+                )}
               </button>
             </div>
+            {editingTransaction && editingTransaction.type !== formData.type && (
+              <div className="mt-2 p-2 rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
+                <p className="text-xs text-brand-700 dark:text-brand-300">
+                  ⚠️ Type changed from <strong>{editingTransaction.type}</strong> to <strong>{formData.type}</strong>
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Amount */}

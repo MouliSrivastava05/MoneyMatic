@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(100)
-  email       String       @unique @db.VarChar(100)
-  password    String       @db.VarChar(255)
+  name        String
+  email       String       @unique
+  password    String
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
 
@@ -23,11 +23,11 @@ model User {
 model Transaction {
   id          Int      @id @default(autoincrement())
   userId      Int      @map("user_id")
-  type        String   @db.VarChar(20) // "income" or "expense"
-  amount      Decimal  @db.Decimal(10, 2)
-  category    String   @db.VarChar(100)
-  description String?  @db.VarChar(255)
-  date        DateTime @db.DateTime
+  type        String   // "income" or "expense"
+  amount      Decimal
+  category    String
+  description String?
+  date        DateTime
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -42,9 +42,9 @@ model Transaction {
 model Budget {
   id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
-  category  String   @db.VarChar(100)
-  limit     Decimal  @db.Decimal(10, 2)
-  period    String   @db.VarChar(20) // "monthly", "weekly", "yearly"
+  category  String
+  limit     Decimal
+  period    String   // "monthly", "weekly", "yearly"
   month     Int?     // 1-12 for monthly budgets
   year      Int?     // For monthly/yearly budgets
   createdAt DateTime @default(now()) @map("created_at")
@@ -61,12 +61,12 @@ model Budget {
 model Reminder {
   id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
-  title     String   @db.VarChar(255)
-  amount    Decimal? @db.Decimal(10, 2)
-  dueDate   DateTime @db.DateTime @map("due_date")
-  frequency String   @db.VarChar(20) // "monthly", "weekly", "one-time", "yearly"
+  title     String
+  amount    Decimal?
+  dueDate   DateTime @map("due_date")
+  frequency String   // "monthly", "weekly", "one-time", "yearly"
   isActive  Boolean  @default(true) @map("is_active")
-  notes     String?  @db.VarChar(500)
+  notes     String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

@@ -6,16 +6,26 @@ import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
 import TransactionTable from '../components/TransactionTable';
 import TransactionModal from '../components/TransactionModal';
+import SortControls from '../components/SortControls';
+import Pagination from '../components/Pagination';
 
 export default function Transactions() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [transactions, setTransactions] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [sortBy, setSortBy] = useState('date');
+  const [sortOrder, setSortOrder] = useState('desc');
   const [formData, setFormData] = useState({
     type: 'expense',
     amount: '',
@@ -35,9 +45,10 @@ export default function Transactions() {
 
   const buildQueryString = useCallback(() => {
     const params = new URLSearchParams();
-    params.append('limit', '50');
-    params.append('sortBy', 'date');
-    params.append('sortOrder', 'desc');
+    params.append('page', pagination.page.toString());
+    params.append('limit', pagination.limit.toString());
+    params.append('sortBy', sortBy);
+    params.append('sortOrder', sortOrder);
     
     if (filters.search) params.append('search', filters.search);
     if (filters.category) params.append('category', filters.category);
@@ -48,7 +59,7 @@ export default function Transactions() {
     if (filters.maxAmount) params.append('maxAmount', filters.maxAmount);
     
     return params.toString();
-  }, [filters]);
+  }, [filters, pagination.page, pagination.limit, sortBy, sortOrder]);
 
   const fetchTransactions = useCallback(async () => {
     try {
@@ -57,6 +68,9 @@ export default function Transactions() {
       const queryString = buildQueryString();
       const response = await api.get(`/api/transactions?${queryString}`);
       setTransactions(response.data.transactions || []);
+      if (response.data.pagination) {
+        setPagination(response.data.pagination);
+      }
     } catch (err) {
       console.error('Error fetching transactions:', err);
       setError(err.response?.data?.message || 'Failed to load transactions');
@@ -74,6 +88,7 @@ export default function Transactions() {
   };
 
   const handleApplyFilters = () => {
+    setPagination({ ...pagination, page: 1 });
     fetchTransactions();
     setShowFilters(false);
   };
@@ -88,9 +103,20 @@ export default function Transactions() {
       minAmount: '',
       maxAmount: '',
     });
+    setPagination({ ...pagination, page: 1 });
     setTimeout(() => {
       fetchTransactions();
     }, 100);
+  };
+
+  const handleSortChange = (newSortBy, newSortOrder) => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder || sortOrder);
+    setPagination({ ...pagination, page: 1 });
+  };
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
   };
 
   const hasActiveFilters = () => {
@@ -250,6 +276,17 @@ export default function Transactions() {
 
         <TransactionSummaryCards transactions={transactions} />
 
+        {/* Sort Controls */}
+        {!loading && transactions.length > 0 && (
+          <div className="mb-4">
+            <SortControls
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={handleSortChange}
+            />
+          </div>
+        )}
+
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
@@ -281,11 +318,19 @@ export default function Transactions() {
             </button>
           </div>
         ) : (
-          <TransactionTable
-            transactions={transactions}
-            onEdit={handleOpenModal}
-            onDelete={handleDelete}
-          />
+          <>
+            <TransactionTable
+              transactions={transactions}
+              onEdit={handleOpenModal}
+              onDelete={handleDelete}
+            />
+            {pagination.totalPages > 1 && (
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
         )}
 
         <TransactionModal
