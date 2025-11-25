@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Budgets from "./pages/Budgets";
+import Reminders from "./pages/Reminders";
 
 function Home() {
   const navigate = useNavigate();
@@ -99,6 +100,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/budgets" element={<Budgets />} />
+        <Route path="/reminders" element={<Reminders />} />
       </Routes>
     </Router>
   );
