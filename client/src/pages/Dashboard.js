@@ -5,6 +5,8 @@ import DashboardStatsCards from '../components/DashboardStatsCards';
 import RecentTransactions from '../components/RecentTransactions';
 import QuickStats from '../components/QuickStats';
 import BudgetOverview from '../components/BudgetOverview';
+import IncomeExpenseChart from '../components/IncomeExpenseChart';
+import CategorySpendingChart from '../components/CategorySpendingChart';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -123,6 +125,18 @@ export default function Dashboard() {
               <QuickStats 
                 budgetData={budgetData} 
                 transactionCount={recentTransactions.length}
+              />
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2 mb-8">
+              <IncomeExpenseChart
+                income={budgetData?.summary?.totalIncome}
+                expense={budgetData?.summary?.totalExpenses}
+                savings={budgetData?.summary?.savings}
+              />
+              <CategorySpendingChart
+                budgets={budgetData?.budgets || []}
+                spendingByCategory={budgetData?.spendingByCategory || {}}
               />
             </div>
 
