@@ -6,7 +6,6 @@ import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Budgets from "./pages/Budgets";
 import Reminders from "./pages/Reminders";
-import Settings from "./pages/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Home() {
@@ -162,14 +161,6 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Reminders />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/settings" 
-          element={
-            <ProtectedRoute>
-              <Settings />
             </ProtectedRoute>
           } 
         />

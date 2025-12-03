@@ -46,16 +46,6 @@ export default function ShellHeader({ active = 'dashboard', user, onLogout }) {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/settings"
-            className={`hidden sm:flex rounded-full px-4 py-2 text-sm font-medium transition ${
-              active === 'settings'
-                ? 'bg-ink-900 text-white shadow-soft dark:bg-white dark:text-ink-900'
-                : 'text-ink-500 hover:text-ink-900'
-            }`}
-          >
-            Settings
-          </Link>
           <span className="hidden text-sm text-ink-600 dark:text-ink-300 sm:inline-flex">
             {displayName}
           </span>

@@ -83,13 +83,13 @@ export default function Budgets() {
 
   const handleEditClick = (budget) => {
     setEditingBudget(budget);
-    setFormData({
-      id: budget.id,
-      category: budget.category,
+      setFormData({
+        id: budget.id,
+        category: budget.category,
       limit: budget.limit.toString(),
-      month: budget.month,
-      year: budget.year,
-    });
+        month: budget.month,
+        year: budget.year,
+      });
     setShowModal(true);
   };
 
@@ -108,13 +108,13 @@ export default function Budgets() {
 
   const handleSubmitBudget = async (event) => {
     event.preventDefault();
-    const payload = {
-      category: formData.category,
-      limit: parseFloat(formData.limit),
+      const payload = {
+        category: formData.category,
+        limit: parseFloat(formData.limit),
       month: parseInt(formData.month, 10),
       year: parseInt(formData.year, 10),
       period: 'monthly',
-    };
+      };
 
     if (!payload.category || Number.isNaN(payload.limit) || payload.limit <= 0) {
       setError('Please provide a valid category and positive budget limit.');
@@ -242,7 +242,7 @@ export default function Budgets() {
         onSubmit={handleSubmitBudget}
         onClose={handleModalClose}
       />
-    </div>
+              </div>
   );
 }
 
