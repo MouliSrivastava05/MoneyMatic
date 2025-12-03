@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import DashboardStatsCards from '../components/DashboardStatsCards';
 import RecentTransactions from '../components/RecentTransactions';
@@ -7,14 +7,18 @@ import QuickStats from '../components/QuickStats';
 import BudgetOverview from '../components/BudgetOverview';
 import IncomeExpenseChart from '../components/IncomeExpenseChart';
 import CategorySpendingChart from '../components/CategorySpendingChart';
+import ShellHeader from '../components/ShellHeader';
+import DashboardHero from '../components/DashboardHero';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [budgetData, setBudgetData] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [remindersCount, setRemindersCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const mainRef = useRef(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -24,12 +28,23 @@ export default function Dashboard() {
     try {
       setLoading(true);
       setError(null);
-      const [budgetResponse, transactionsResponse] = await Promise.all([
+      const [budgetResponse, transactionsResponse, remindersResponse] = await Promise.all([
         api.get('/api/budget'),
         api.get('/api/transactions?limit=5&sortBy=date&sortOrder=desc'),
+        api.get('/api/reminders?isActive=true').catch(() => ({ data: { reminders: [] } })),
       ]);
       setBudgetData(budgetResponse.data);
       setRecentTransactions(transactionsResponse.data.transactions || []);
+      
+      // Count reminders due in the next 7 days
+      const reminders = remindersResponse.data?.reminders || [];
+      const now = new Date();
+      const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const upcomingReminders = reminders.filter(r => {
+        const dueDate = new Date(r.dueDate);
+        return dueDate >= now && dueDate <= nextWeek;
+      });
+      setRemindersCount(upcomingReminders.length);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError(err.response?.data?.message || 'Failed to load dashboard data');
@@ -45,53 +60,22 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-ink-50 dark:bg-ink-900">
-      {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-ink-100/70 bg-white/70 backdrop-blur-xs dark:bg-ink-900/60 dark:border-ink-800">
-        <div className="mx-auto max-w-7xl px-4 h-14 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-brand-start to-brand-end" />
-            <span className="font-display text-lg tracking-tight">MoneyMatic</span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-2">
-            <Link to="/dashboard" className="btn-ghost text-sm">Dashboard</Link>
-            <Link to="/transactions" className="btn-ghost text-sm">Transactions</Link>
-            <Link to="/budgets" className="btn-ghost text-sm">Budgets</Link>
-            <Link to="/reminders" className="btn-ghost text-sm">Reminders</Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-ink-600 dark:text-ink-400">
-              {user.name || 'User'}
-            </span>
-            <button onClick={handleLogout} className="btn-ghost text-sm">
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="page-shell">
+      <ShellHeader active="dashboard" user={user} onLogout={handleLogout} />
 
-      {/* Dashboard Content */}
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-ink-900 dark:text-ink-100">
-                Welcome back, {user.name || 'User'}! 👋
-              </h1>
-              <p className="mt-2 text-ink-600 dark:text-ink-400">
-                Here's your financial overview for{' '}
-                {budgetData?.period
-                  ? new Date(budgetData.period.year, budgetData.period.month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })
-                  : 'this month'}
-              </p>
-            </div>
-            <Link to="/transactions" className="btn-primary hidden md:flex">
-              + Add Transaction
-            </Link>
-          </div>
-        </div>
+      <div className="mx-auto max-w-7xl px-4 py-10 space-y-8">
+        <DashboardHero
+          onExplore={() => {
+            if (mainRef.current) {
+              mainRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+          onLearn={() => navigate('/transactions')}
+          budgetData={budgetData}
+          remindersCount={remindersCount}
+        />
 
+        <div ref={mainRef}>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
@@ -140,10 +124,10 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* Budget Overview */}
             <BudgetOverview budgetData={budgetData} />
           </>
         )}
+        </div>
       </div>
     </div>
   );

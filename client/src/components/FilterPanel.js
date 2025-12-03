@@ -1,19 +1,5 @@
 import React from 'react';
-
-const categories = [
-  'Food & Dining',
-  'Shopping',
-  'Transportation',
-  'Bills & Utilities',
-  'Entertainment',
-  'Healthcare',
-  'Education',
-  'Travel',
-  'Salary',
-  'Freelance',
-  'Investment',
-  'Other',
-];
+import { CATEGORY_OPTIONS } from '../constants/categories';
 
 export default function FilterPanel({
   filters,
@@ -63,7 +49,7 @@ export default function FilterPanel({
             className="input"
           >
             <option value="">All Categories</option>
-            {categories.map((cat) => (
+            {CATEGORY_OPTIONS.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>

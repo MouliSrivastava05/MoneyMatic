@@ -75,3 +75,4 @@ export default function CategorySpendingChart({ budgets = [], spendingByCategory
 }
 
 
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import TransactionSummaryCards from '../components/TransactionSummaryCards';
 import SearchBar from '../components/SearchBar';
@@ -8,6 +8,8 @@ import TransactionTable from '../components/TransactionTable';
 import TransactionModal from '../components/TransactionModal';
 import SortControls from '../components/SortControls';
 import Pagination from '../components/Pagination';
+import ShellHeader from '../components/ShellHeader';
+import PageHero from '../components/PageHero';
 
 export default function Transactions() {
   const navigate = useNavigate();
@@ -198,65 +200,38 @@ export default function Transactions() {
   };
 
   return (
-    <div className="min-h-screen bg-ink-50 dark:bg-ink-900">
-      {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-ink-100/70 bg-white/70 backdrop-blur-xs dark:bg-ink-900/60 dark:border-ink-800">
-        <div className="mx-auto max-w-7xl px-4 h-14 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-brand-start to-brand-end" />
-            <span className="font-display text-lg tracking-tight">MoneyMatic</span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-2">
-            <Link to="/dashboard" className="btn-ghost text-sm">Dashboard</Link>
-            <Link to="/transactions" className="btn-ghost text-sm bg-ink-100 dark:bg-ink-800">Transactions</Link>
-            <Link to="/budgets" className="btn-ghost text-sm">Budgets</Link>
-            <Link to="/reminders" className="btn-ghost text-sm">Reminders</Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-ink-600 dark:text-ink-400">
-              {user.name || 'User'}
-            </span>
-            <button onClick={handleLogout} className="btn-ghost text-sm">
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="page-shell">
+      <ShellHeader active="transactions" user={user} onLogout={handleLogout} />
 
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-ink-900 dark:text-ink-100">
-                Transactions 💳
-              </h1>
-              <p className="mt-2 text-ink-600 dark:text-ink-400">
-                Manage all your income and expenses
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`btn-ghost flex items-center gap-2 ${
-                  hasActiveFilters() ? 'bg-brand-100 dark:bg-brand-900/20' : ''
-                }`}
-              >
-                <span>🔍</span>
-                <span className="hidden md:inline">Filters</span>
-                {hasActiveFilters() && (
-                  <span className="h-2 w-2 rounded-full bg-brand-500"></span>
-                )}
-              </button>
-              <button
-                onClick={() => handleOpenModal()}
-                className="btn-primary flex items-center gap-2"
-              >
-                <span>+</span>
-                <span className="hidden md:inline">Add Transaction</span>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="mx-auto max-w-7xl px-4 py-10 space-y-8">
+        <PageHero
+          eyebrow="Transactions"
+          title="Every movement, one timeline"
+          description="Search, filter, and add entries on the fly with a log built for humans."
+          actions={[
+            <button
+              key="filter"
+              type="button"
+              onClick={() => setShowFilters(!showFilters)}
+              className={`btn-outline flex items-center gap-2 ${
+                hasActiveFilters() ? 'border-brand-400 text-brand-600' : ''
+              }`}
+            >
+              <span className="text-lg">⌕</span>
+              Filters
+              {hasActiveFilters() && <span className="h-2 w-2 rounded-full bg-brand-500" />}
+            </button>,
+            <button
+              key="new"
+              type="button"
+              onClick={() => handleOpenModal()}
+              className="btn-primary flex items-center gap-2"
+            >
+              <span>+</span>
+              New entry
+            </button>,
+          ]}
+        />
 
         <SearchBar
           search={filters.search}

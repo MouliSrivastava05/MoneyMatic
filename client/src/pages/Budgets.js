@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import BudgetSummaryCards from '../components/BudgetSummaryCards';
 import BudgetList from '../components/BudgetList';
 import BudgetModal from '../components/BudgetModal';
+import ShellHeader from '../components/ShellHeader';
+import PageHero from '../components/PageHero';
 
 const buildMonthOptions = () =>
   Array.from({ length: 12 }).map((_, index) => ({
@@ -149,53 +151,24 @@ export default function Budgets() {
   };
 
   return (
-    <div className="min-h-screen bg-ink-50 dark:bg-ink-900">
-      <header className="sticky top-0 z-20 border-b border-ink-100/70 bg-white/80 backdrop-blur-md dark:bg-ink-900/70 dark:border-ink-800">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-brand-start to-brand-end" />
-            <span className="font-display text-lg tracking-tight text-ink-900 dark:text-white">
-              MoneyMatic
-            </span>
-          </Link>
-          <nav className="hidden items-center gap-2 text-sm font-medium text-ink-600 dark:text-ink-400 md:flex">
-            <Link className="btn-ghost" to="/dashboard">
-              Dashboard
-            </Link>
-            <Link className="btn-ghost" to="/transactions">
-              Transactions
-            </Link>
-            <Link className="btn-ghost bg-ink-100/80 dark:bg-ink-800/80" to="/budgets">
-              Budgets
-            </Link>
-            <Link className="btn-ghost" to="/reminders">
-              Reminders
-            </Link>
-          </nav>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="text-ink-600 dark:text-ink-300 capitalize">
-              {user?.name || 'User'}
-            </span>
-            <button type="button" className="btn-ghost" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="page-shell">
+      <ShellHeader active="budgets" user={user} onLogout={handleLogout} />
 
-      <main className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-wide text-ink-500">Budgets</p>
-            <h1 className="mt-1 text-3xl font-bold text-ink-900 dark:text-ink-50">
-              Monthly Budget Planner
-            </h1>
-            <p className="mt-2 text-ink-600 dark:text-ink-400">
-              Track, adjust, and optimize your monthly spending goals.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
+      <main className="mx-auto max-w-7xl px-4 py-10 space-y-8">
+        <PageHero
+          eyebrow="Budgets"
+          title="Monthly budget planner"
+          description="Track categories with intentional visuals and quick actions."
+          meta={[
+            {
+              label: 'Month',
+              value: monthOptions.find((option) => option.value === filters.month)?.label || '',
+            },
+            { label: 'Year', value: String(filters.year) },
+          ]}
+          actions={[
             <select
+              key="month"
               className="input w-36"
               value={filters.month}
               onChange={(event) =>
@@ -207,8 +180,9 @@ export default function Budgets() {
                   {option.label}
                 </option>
               ))}
-            </select>
+            </select>,
             <select
+              key="year"
               className="input w-32"
               value={filters.year}
               onChange={(event) =>
@@ -220,15 +194,15 @@ export default function Budgets() {
                   {year}
                 </option>
               ))}
-            </select>
-            <button type="button" className="btn-ghost" onClick={fetchBudgets}>
+            </select>,
+            <button key="refresh" type="button" className="btn-outline" onClick={fetchBudgets}>
               Refresh
-            </button>
-            <button type="button" className="btn-primary" onClick={handleCreateClick}>
+            </button>,
+            <button key="new" type="button" className="btn-primary" onClick={handleCreateClick}>
               + New Budget
-            </button>
-          </div>
-        </div>
+            </button>,
+          ]}
+        />
 
         {error && (
           <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-700 dark:border-rose-900/40 dark:bg-rose-900/30 dark:text-rose-200">

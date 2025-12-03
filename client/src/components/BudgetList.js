@@ -22,78 +22,74 @@ export default function BudgetList({ budgets, onEdit, onDelete }) {
     );
   }
 
+  const cellBase =
+    'py-4 px-4 text-sm bg-white/85 dark:bg-ink-900/70 backdrop-blur border border-white/30 dark:border-ink-800/40 first:rounded-l-2xl last:rounded-r-2xl align-middle';
+
   return (
-    <div className="card">
+    <div className="card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full border-separate border-spacing-y-3">
           <thead>
-            <tr className="border-b border-ink-200 dark:border-ink-700">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Category
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Limit
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Spent
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Remaining
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Status
-              </th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Actions
-              </th>
+            <tr className="text-xs uppercase tracking-[0.3em] text-ink-500 dark:text-ink-400">
+              <th className="pb-2 pl-2 text-left">Category</th>
+              <th className="pb-2 text-left">Limit</th>
+              <th className="pb-2 text-left">Spent</th>
+              <th className="pb-2 text-left">Remaining</th>
+              <th className="pb-2 text-left">Status</th>
+              <th className="pb-2 pr-2 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {budgets.map((budget) => (
-              <tr
-                key={budget.id}
-                className="border-b border-ink-100 dark:border-ink-800 hover:bg-ink-50 dark:hover:bg-ink-800/50 transition-colors"
-              >
-                <td className="py-4 px-4 font-medium text-ink-900 dark:text-ink-100">
-                  {budget.category}
+              <tr key={budget.id} className="text-ink-900 dark:text-ink-100">
+                <td className={`${cellBase} font-semibold`}>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-brand-start to-brand-end opacity-80" />
+                    <div>
+                      {budget.category}
+                      <p className="text-xs text-ink-400 dark:text-ink-500">
+                        {budget.month}/{budget.year}
+                      </p>
+                    </div>
+                  </div>
                 </td>
-                <td className="py-4 px-4 text-ink-700 dark:text-ink-300">
+                <td className={`${cellBase} text-ink-600 dark:text-ink-300`}>
                   {formatCurrency(budget.limit)}
                 </td>
-                <td className="py-4 px-4 text-ink-700 dark:text-ink-300">
+                <td className={`${cellBase} text-ink-600 dark:text-ink-300`}>
                   {formatCurrency(budget.actualSpending)}
                 </td>
                 <td
-                  className={`py-4 px-4 font-semibold ${
-                    budget.remaining >= 0
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-rose-600 dark:text-rose-400'
+                  className={`${cellBase} font-semibold ${
+                    budget.remaining >= 0 ? 'text-emerald-400' : 'text-rose-400'
                   }`}
                 >
                   {formatCurrency(budget.remaining)}
                 </td>
-                <td className="py-4 px-4">
+                <td className={cellBase}>
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
                       budget.isOverBudget
-                        ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300'
-                        : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
+                        ? 'bg-rose-500/15 text-rose-300'
+                        : 'bg-emerald-500/15 text-emerald-300'
                     }`}
                   >
-                    {budget.isOverBudget ? 'Over Budget' : 'Within Budget'}
+                    <span className="h-2 w-2 rounded-full bg-current" />
+                    {budget.isOverBudget ? 'Over budget' : 'Within budget'}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
+                <td className={`${cellBase} text-right`}>
+                  <div className="flex items-center justify-end gap-2 text-sm font-medium">
                     <button
                       onClick={() => onEdit(budget)}
-                      className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 text-sm font-medium"
+                      className="text-brand-400 hover:text-brand-300 transition"
                     >
                       Edit
                     </button>
+                    <span className="h-5 w-px bg-white/30 dark:bg-ink-700" />
                     <button
                       onClick={() => onDelete(budget.id)}
-                      className="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 text-sm font-medium"
+                      className="text-rose-400 hover:text-rose-300 transition"
                     >
                       Delete
                     </button>

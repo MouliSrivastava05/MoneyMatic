@@ -1,17 +1,6 @@
 import React from 'react';
-
-const CATEGORY_OPTIONS = [
-  'Housing',
-  'Food & Dining',
-  'Transportation',
-  'Bills & Utilities',
-  'Entertainment',
-  'Healthcare',
-  'Education',
-  'Savings',
-  'Travel',
-  'Other',
-];
+import { createPortal } from 'react-dom';
+import { CATEGORY_OPTIONS } from '../constants/categories';
 
 export default function BudgetModal({
   show,
@@ -28,7 +17,7 @@ export default function BudgetModal({
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 6 }).map((_, index) => currentYear - 2 + index);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-md">
         <div className="card max-h-[90vh] overflow-y-auto">
@@ -137,7 +126,8 @@ export default function BudgetModal({
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

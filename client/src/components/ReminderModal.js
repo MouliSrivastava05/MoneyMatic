@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 const FREQUENCY_OPTIONS = [
   { value: 'one-time', label: 'One-time' },
@@ -21,7 +22,7 @@ export default function ReminderModal({
     onFieldChange(field, value);
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
       <div className="w-full max-w-lg">
         <div className="card max-h-[90vh] overflow-y-auto">
@@ -160,7 +161,8 @@ export default function ReminderModal({
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

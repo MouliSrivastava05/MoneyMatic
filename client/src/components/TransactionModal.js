@@ -1,10 +1,5 @@
 import React from 'react';
-
-const categories = ['Food & Dining', 'Shopping', 'Transportation',
-  'Bills & Utilities', 'Entertainment', 'Healthcare',
-  'Education', 'Travel', 'Salary', 'Freelance',
-  'Investment','Other',
-];
+import { CATEGORY_OPTIONS } from '../constants/categories';
 
 export default function TransactionModal({
   show,
@@ -123,7 +118,7 @@ export default function TransactionModal({
               className="input"
             >
               <option value="">Select a category</option>
-              {categories.map((cat) => (
+              {CATEGORY_OPTIONS.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>

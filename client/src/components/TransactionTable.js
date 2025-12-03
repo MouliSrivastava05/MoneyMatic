@@ -31,81 +31,75 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
     );
   }
 
+  const cellBase =
+    'py-4 px-4 text-sm bg-white/85 dark:bg-ink-900/70 backdrop-blur border border-white/40 dark:border-ink-800/40 first:rounded-l-2xl last:rounded-r-2xl align-middle';
+
   return (
-    <div className="card">
+    <div className="card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full border-separate border-spacing-y-3">
           <thead>
-            <tr className="border-b border-ink-200 dark:border-ink-700">
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Date
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Description
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Category
-              </th>
-              <th className="text-left py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Type
-              </th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Amount
-              </th>
-              <th className="text-right py-3 px-4 text-sm font-semibold text-ink-600 dark:text-ink-400">
-                Actions
-              </th>
+            <tr className="text-xs uppercase tracking-[0.3em] text-ink-500 dark:text-ink-400">
+              <th className="pb-2 pl-2 text-left">Date</th>
+              <th className="pb-2 text-left">Description</th>
+              <th className="pb-2 text-left">Category</th>
+              <th className="pb-2 text-left">Type</th>
+              <th className="pb-2 pr-2 text-right">Amount</th>
+              <th className="pb-2 pr-2 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {transactions.map((transaction) => (
-              <tr
-                key={transaction.id}
-                className="border-b border-ink-100 dark:border-ink-800 hover:bg-ink-50 dark:hover:bg-ink-800/50 transition-colors"
-              >
-                <td className="py-4 px-4 text-sm text-ink-600 dark:text-ink-400">
+              <tr key={transaction.id} className="text-ink-800 dark:text-ink-50">
+                <td className={`${cellBase} text-ink-600 dark:text-ink-300`}>
                   {formatDate(transaction.date)}
                 </td>
-                <td className="py-4 px-4">
-                  <div className="font-medium text-ink-900 dark:text-ink-100">
+                <td className={`${cellBase}`}>
+                  <div className="font-medium text-ink-900 dark:text-white">
                     {transaction.description || 'No description'}
                   </div>
+                  <p className="text-xs text-ink-400 dark:text-ink-500 mt-1">{transaction.account || 'Personal'}</p>
                 </td>
-                <td className="py-4 px-4">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-ink-100 dark:bg-ink-700 text-ink-700 dark:text-ink-300">
+                <td className={`${cellBase}`}>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/80 px-3 py-1 text-xs font-semibold text-ink-600 dark:border-ink-700 dark:bg-ink-800/60 dark:text-ink-200">
+                    <span className="h-2 w-2 rounded-full bg-brand-500" />
                     {transaction.category}
                   </span>
                 </td>
-                <td className="py-4 px-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    transaction.type === 'income'
-                      ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
-                      : 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300'
-                  }`}>
-                    {transaction.type === 'income' ? '⬆️ Income' : '⬇️ Expense'}
+                <td className={`${cellBase}`}>
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
+                      transaction.type === 'income'
+                        ? 'bg-emerald-500/15 text-emerald-300'
+                        : 'bg-rose-500/15 text-rose-300'
+                    }`}
+                  >
+                    <span>{transaction.type === 'income' ? '⬆︎' : '⬇︎'}</span>
+                    {transaction.type === 'income' ? 'Income' : 'Expense'}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-right">
-                  <span className={`font-semibold ${
-                    transaction.type === 'income'
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-rose-600 dark:text-rose-400'
-                  }`}>
+                <td className={`${cellBase} text-right`}>
+                  <span
+                    className={`text-lg font-semibold ${
+                      transaction.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
+                    }`}
+                  >
                     {transaction.type === 'income' ? '+' : '-'}
                     {formatCurrency(transaction.amount)}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
+                <td className={`${cellBase} text-right`}>
+                  <div className="flex items-center justify-end gap-2 text-sm font-medium">
                     <button
                       onClick={() => onEdit(transaction)}
-                      className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 text-sm font-medium"
+                      className="text-brand-400 hover:text-brand-300 transition"
                     >
                       Edit
                     </button>
+                    <span className="h-5 w-px bg-white/30 dark:bg-ink-700" />
                     <button
                       onClick={() => onDelete(transaction.id)}
-                      className="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 text-sm font-medium"
+                      className="text-rose-400 hover:text-rose-300 transition"
                     >
                       Delete
                     </button>

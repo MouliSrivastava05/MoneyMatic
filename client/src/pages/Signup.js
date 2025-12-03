@@ -70,7 +70,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ink-50 via-brand-50/20 to-ink-50 dark:from-ink-900 dark:via-ink-900 dark:to-ink-800 px-4 py-12">
+    <div className="page-shell flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
 
         <div className="text-center mb-8 animate-subtleIn">
