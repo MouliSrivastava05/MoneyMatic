@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import AnimatedLogo from './AnimatedLogo';
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', to: '/dashboard' },
@@ -20,7 +21,7 @@ export default function ShellHeader({ active = 'dashboard', user, onLogout }) {
           onClick={() => navigate('/dashboard')}
           className="flex items-center gap-3 rounded-full border border-white/60 bg-white/80 px-4 py-2 text-left shadow-soft transition hover:shadow-glow dark:bg-ink-800/60 dark:border-ink-700"
         >
-          <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-brand-start to-brand-end shadow-soft" />
+          <AnimatedLogo size="md" />
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-ink-400 dark:text-ink-500">
               MoneyMatic

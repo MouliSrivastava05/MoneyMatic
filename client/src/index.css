@@ -8,13 +8,28 @@
     height: 100%;
   }
   body {
-    @apply bg-black text-ink-100 antialiased;
+    @apply text-ink-100 antialiased;
     font-feature-settings: 'liga' on, 'tnum' on;
-    background-image: none;
+    background: linear-gradient(135deg, #000000 0%, #0a1f1a 25%, #000000 50%, #0a1f1a 75%, #000000 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
   }
   .dark body {
-    @apply bg-black text-ink-100;
-    background-image: none;
+    @apply text-ink-100;
+    background: linear-gradient(135deg, #000000 0%, #0a1f1a 25%, #000000 50%, #0a1f1a 75%, #000000 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 }
 
@@ -93,7 +108,40 @@
       transform: translateY(0);
     }
   }
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes bounce-slow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+  @keyframes money-glow {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(46, 168, 137, 0.5), 0 0 20px rgba(46, 168, 137, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(46, 168, 137, 0.8), 0 0 30px rgba(46, 168, 137, 0.5);
+    }
+  }
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out;
+  }
+  .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+  }
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+  .animate-money-glow {
+    animation: money-glow 2s ease-in-out infinite;
   }
 }

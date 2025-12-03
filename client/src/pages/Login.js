@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
+import AnimatedLogo from '../components/AnimatedLogo';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function Login() {
         {/* Logo and Header */}
         <div className="text-center mb-8 animate-subtleIn">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-start to-brand-end shadow-soft" />
+            <AnimatedLogo size="lg" />
             <span className="font-display text-2xl font-semibold tracking-tight">
               MoneyMatic
             </span>

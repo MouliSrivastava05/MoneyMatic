@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
+import WarningIcon from '../icons/WarningIcon';
+import NoteIcon from '../icons/NoteIcon';
 import TransactionSummaryCards from '../components/TransactionSummaryCards';
 import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
@@ -270,7 +272,7 @@ export default function Transactions() {
         ) : error ? (
           <div className="card bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800">
             <div className="flex items-center gap-3">
-              <div className="text-2xl">⚠️</div>
+              <WarningIcon className="w-8 h-8 text-rose-600 dark:text-rose-400" />
               <div>
                 <p className="text-rose-700 dark:text-rose-300 font-medium">{error}</p>
                 <button onClick={fetchTransactions} className="mt-3 btn-ghost text-sm">
@@ -281,7 +283,9 @@ export default function Transactions() {
           </div>
         ) : transactions.length === 0 && !hasActiveFilters() ? (
           <div className="card text-center py-12">
-            <div className="text-5xl mb-4">📝</div>
+            <div className="flex justify-center mb-4">
+              <NoteIcon className="w-20 h-20 text-ink-400 dark:text-ink-500" />
+            </div>
             <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-100 mb-2">
               No Transactions Yet
             </h3>

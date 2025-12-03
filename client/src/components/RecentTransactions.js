@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ArrowUpIcon from '../icons/ArrowUpIcon';
+import ArrowDownIcon from '../icons/ArrowDownIcon';
+import NoteIcon from '../icons/NoteIcon';
 
 export default function RecentTransactions({ transactions }) {
   const formatCurrency = (amount) => {
@@ -40,9 +43,11 @@ export default function RecentTransactions({ transactions }) {
                     ? 'bg-emerald-100 dark:bg-emerald-900/30'
                     : 'bg-rose-100 dark:bg-rose-900/30'
                 }`}>
-                  <span className="text-lg">
-                    {transaction.type === 'income' ? '⬆️' : '⬇️'}
-                  </span>
+                  {transaction.type === 'income' ? (
+                    <ArrowUpIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  ) : (
+                    <ArrowDownIcon className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                  )}
                 </div>
                 <div>
                   <p className="font-medium text-ink-900 dark:text-ink-100">
@@ -66,7 +71,9 @@ export default function RecentTransactions({ transactions }) {
         </div>
       ) : (
         <div className="text-center py-8">
-          <div className="text-4xl mb-3">📝</div>
+          <div className="flex justify-center mb-3">
+            <NoteIcon className="w-16 h-16 text-ink-400 dark:text-ink-500" />
+          </div>
           <p className="text-ink-600 dark:text-ink-400 mb-4">
             No transactions yet
           </p>

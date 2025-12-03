@@ -1,5 +1,6 @@
 import React from 'react';
 import { CATEGORY_OPTIONS } from '../constants/categories';
+import CloseIcon from '../icons/CloseIcon';
 
 export default function FilterPanel({
   filters,
@@ -17,8 +18,9 @@ export default function FilterPanel({
         <button
           onClick={onClose}
           className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300"
+          aria-label="Close"
         >
-          ✕
+          <CloseIcon className="w-5 h-5" />
         </button>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

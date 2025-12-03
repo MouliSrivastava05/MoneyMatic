@@ -1,5 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ChartIcon from '../icons/ChartIcon';
+import WarningIcon from '../icons/WarningIcon';
+import CheckIcon from '../icons/CheckIcon';
+import IncomeIcon from '../icons/IncomeIcon';
+import ExpenseIcon from '../icons/ExpenseIcon';
 
 export default function BudgetOverview({ budgetData }) {
   const formatCurrency = (amount) => {
@@ -15,7 +20,9 @@ export default function BudgetOverview({ budgetData }) {
   if (!budgetData.budgets || budgetData.budgets.length === 0) {
     return (
       <div className="card text-center py-12">
-        <div className="text-5xl mb-4">📊</div>
+        <div className="flex justify-center mb-4">
+          <ChartIcon className="w-20 h-20 text-ink-400 dark:text-ink-500" />
+        </div>
         <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-100 mb-2">
           No Budgets Set
         </h3>
@@ -61,7 +68,11 @@ export default function BudgetOverview({ budgetData }) {
                     ? 'bg-rose-100 dark:bg-rose-900/30'
                     : 'bg-emerald-100 dark:bg-emerald-900/30'
                 }`}>
-                  <span>{budget.isOverBudget ? '⚠️' : '✅'}</span>
+                  {budget.isOverBudget ? (
+                    <WarningIcon className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                  ) : (
+                    <CheckIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  )}
                 </div>
                 <span className="font-semibold text-ink-900 dark:text-ink-100">
                   {budget.category}
@@ -95,11 +106,13 @@ export default function BudgetOverview({ budgetData }) {
                 ></div>
               </div>
             </div>
-            <div className="flex justify-between text-xs text-ink-500 dark:text-ink-400">
+            <div className="flex justify-between items-center text-xs text-ink-500 dark:text-ink-400">
               <span>Remaining: {formatCurrency(budget.remaining)}</span>
-              <span>
-                {budget.remaining >= 0 ? '💰' : '💸'}
-              </span>
+              {budget.remaining >= 0 ? (
+                <IncomeIcon className="w-4 h-4 text-emerald-500" />
+              ) : (
+                <ExpenseIcon className="w-4 h-4 text-rose-500" />
+              )}
             </div>
           </div>
         ))}

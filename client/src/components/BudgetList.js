@@ -1,4 +1,5 @@
 import React from 'react';
+import ChartIcon from '../icons/ChartIcon';
 
 export default function BudgetList({ budgets, onEdit, onDelete }) {
   const formatCurrency = (amount) =>
@@ -11,7 +12,9 @@ export default function BudgetList({ budgets, onEdit, onDelete }) {
   if (!budgets || budgets.length === 0) {
     return (
       <div className="card text-center py-12">
-        <div className="text-5xl mb-4">📊</div>
+        <div className="flex justify-center mb-4">
+          <ChartIcon className="w-20 h-20 text-ink-400 dark:text-ink-500" />
+        </div>
         <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-100 mb-2">
           No Budgets Found
         </h3>

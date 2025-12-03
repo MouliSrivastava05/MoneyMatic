@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-US', {
@@ -9,7 +10,8 @@ const formatCurrency = (amount) => {
   }).format(amount || 0);
 };
 
-export default function DashboardHero({ onExplore, onLearn, budgetData, remindersCount = 0 }) {
+export default function DashboardHero({ onExplore, budgetData, remindersCount = 0 }) {
+  const navigate = useNavigate();
   const income = budgetData?.summary?.totalIncome || 0;
   const expenses = budgetData?.summary?.totalExpenses || 0;
   const savings = budgetData?.summary?.savings || 0;
@@ -48,10 +50,10 @@ export default function DashboardHero({ onExplore, onLearn, budgetData, reminder
             </button>
             <button
               type="button"
-              onClick={onLearn}
+              onClick={() => navigate('/personal-finance-guide')}
               className="btn-ghost px-6 py-3 text-base border border-white/20 bg-white/5 text-white hover:bg-white/10"
             >
-              See how tracking works
+              How to manage personal finance
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { CATEGORY_OPTIONS } from '../constants/categories';
+import CloseIcon from '../icons/CloseIcon';
 
 export default function BudgetModal({
   show,
@@ -38,7 +39,7 @@ export default function BudgetModal({
               onClick={onClose}
               aria-label="Close dialog"
             >
-              ✕
+              <CloseIcon className="w-5 h-5" />
             </button>
           </div>
 

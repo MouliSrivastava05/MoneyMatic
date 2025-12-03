@@ -1,4 +1,7 @@
 import React from 'react';
+import IncomeIcon from '../icons/IncomeIcon';
+import ExpenseIcon from '../icons/ExpenseIcon';
+import ChartIcon from '../icons/ChartIcon';
 
 export default function TransactionSummaryCards({ transactions }) {
   const formatCurrency = (amount) => {
@@ -24,7 +27,7 @@ export default function TransactionSummaryCards({ transactions }) {
       <div className="card bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border-emerald-200 dark:border-emerald-800">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-10 w-10 rounded-lg bg-emerald-500 flex items-center justify-center">
-            <span className="text-xl">💰</span>
+            <IncomeIcon className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-sm text-ink-600 dark:text-ink-400">Total Income</p>
@@ -38,7 +41,7 @@ export default function TransactionSummaryCards({ transactions }) {
       <div className="card bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20 border-rose-200 dark:border-rose-800">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-10 w-10 rounded-lg bg-rose-500 flex items-center justify-center">
-            <span className="text-xl">💸</span>
+            <ExpenseIcon className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-sm text-ink-600 dark:text-ink-400">Total Expenses</p>
@@ -52,7 +55,7 @@ export default function TransactionSummaryCards({ transactions }) {
       <div className="card bg-gradient-to-br from-brand-50 to-brand-100 dark:from-brand-900/20 dark:to-brand-800/20 border-brand-200 dark:border-brand-800">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-10 w-10 rounded-lg bg-brand-500 flex items-center justify-center">
-            <span className="text-xl">📊</span>
+            <ChartIcon className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-sm text-ink-600 dark:text-ink-400">Net Balance</p>

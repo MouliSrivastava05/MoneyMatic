@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
+import WarningIcon from '../icons/WarningIcon';
 import DashboardStatsCards from '../components/DashboardStatsCards';
 import RecentTransactions from '../components/RecentTransactions';
 import QuickStats from '../components/QuickStats';
@@ -113,7 +114,6 @@ export default function Dashboard() {
               mainRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }}
-          onLearn={() => navigate('/transactions')}
           budgetData={budgetData}
           remindersCount={remindersCount}
         />
@@ -144,7 +144,7 @@ export default function Dashboard() {
           ) : error ? (
             <div className="card bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800 animate-pulse">
               <div className="flex items-center gap-4">
-                <div className="text-4xl">⚠️</div>
+                <WarningIcon className="w-12 h-12 text-rose-600 dark:text-rose-400 flex-shrink-0" />
                 <div className="flex-1">
                   <p className="text-rose-700 dark:text-rose-300 font-medium text-lg mb-2">{error}</p>
                   <button

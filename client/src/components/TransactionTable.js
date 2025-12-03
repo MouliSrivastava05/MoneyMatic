@@ -1,4 +1,7 @@
 import React from 'react';
+import NoteIcon from '../icons/NoteIcon';
+import ArrowUpIcon from '../icons/ArrowUpIcon';
+import ArrowDownIcon from '../icons/ArrowDownIcon';
 
 export default function TransactionTable({ transactions, onEdit, onDelete }) {
   const formatCurrency = (amount) => {
@@ -20,7 +23,9 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
   if (transactions.length === 0) {
     return (
       <div className="card text-center py-12">
-        <div className="text-5xl mb-4">📝</div>
+        <div className="flex justify-center mb-4">
+          <NoteIcon className="w-20 h-20 text-ink-400 dark:text-ink-500" />
+        </div>
         <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-100 mb-2">
           No Transactions Found
         </h3>
@@ -67,14 +72,18 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
                   </span>
                 </td>
                 <td className={`${cellBase}`}>
-                  <span
+                    <span
                     className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
                       transaction.type === 'income'
                         ? 'bg-emerald-500/15 text-emerald-300'
                         : 'bg-rose-500/15 text-rose-300'
                     }`}
                   >
-                    <span>{transaction.type === 'income' ? '⬆︎' : '⬇︎'}</span>
+                    {transaction.type === 'income' ? (
+                      <ArrowUpIcon className="w-4 h-4" />
+                    ) : (
+                      <ArrowDownIcon className="w-4 h-4" />
+                    )}
                     {transaction.type === 'income' ? 'Income' : 'Expense'}
                   </span>
                 </td>

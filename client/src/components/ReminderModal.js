@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import CloseIcon from '../icons/CloseIcon';
 
 const FREQUENCY_OPTIONS = [
   { value: 'one-time', label: 'One-time' },
@@ -41,7 +42,7 @@ export default function ReminderModal({
               onClick={onClose}
               aria-label="Close dialog"
             >
-              ✕
+              <CloseIcon className="w-5 h-5" />
             </button>
           </div>
 

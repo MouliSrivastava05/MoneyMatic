@@ -1,4 +1,5 @@
 import React from 'react';
+import BellIcon from '../icons/BellIcon';
 
 const frequencyLabels = {
   'one-time': 'One-time',
@@ -39,7 +40,9 @@ export default function ReminderList({
   if (!reminders.length) {
     return (
       <div className="card text-center py-12">
-        <div className="mb-4 text-5xl">🔔</div>
+        <div className="flex justify-center mb-4">
+          <BellIcon className="w-20 h-20 text-ink-400 dark:text-ink-500" />
+        </div>
         <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-100 mb-2">No Reminders</h3>
         <p className="text-ink-600 dark:text-ink-400">{emptyMessage}</p>
       </div>

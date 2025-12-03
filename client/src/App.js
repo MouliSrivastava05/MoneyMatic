@@ -6,7 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Budgets from "./pages/Budgets";
 import Reminders from "./pages/Reminders";
+import PersonalFinanceBlog from "./pages/PersonalFinanceBlog";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AnimatedLogo from "./components/AnimatedLogo";
 
 function Home() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ function Home() {
     <div className="page-shell">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-6">
         <Link to="/" className="flex items-center gap-3 rounded-full border border-white/60 bg-white/70 px-4 py-2 shadow-soft">
-          <div className="h-8 w-8 rounded-2xl bg-gradient-to-br from-brand-start to-brand-end" />
+          <AnimatedLogo size="sm" />
           <span className="font-display text-lg tracking-tight text-ink-900">MoneyMatic</span>
         </Link>
         <div className="hidden items-center gap-3 md:flex">
@@ -161,6 +163,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Reminders />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/personal-finance-guide" 
+          element={
+            <ProtectedRoute>
+              <PersonalFinanceBlog />
             </ProtectedRoute>
           } 
         />

@@ -1,5 +1,9 @@
 import React from 'react';
 import { CATEGORY_OPTIONS } from '../constants/categories';
+import IncomeIcon from '../icons/IncomeIcon';
+import ExpenseIcon from '../icons/ExpenseIcon';
+import WarningIcon from '../icons/WarningIcon';
+import CloseIcon from '../icons/CloseIcon';
 
 export default function TransactionModal({
   show,
@@ -28,8 +32,9 @@ export default function TransactionModal({
           <button
             onClick={onClose}
             className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300"
+            aria-label="Close"
           >
-            ✕
+            <CloseIcon className="w-5 h-5" />
           </button>
         </div>
 
@@ -54,7 +59,9 @@ export default function TransactionModal({
                     : 'border-ink-200 dark:border-ink-700 hover:border-emerald-300 dark:hover:border-emerald-700'
                 }`}
               >
-                <div className="text-3xl mb-2">💰</div>
+                <div className="mb-2 flex justify-center">
+                  <IncomeIcon className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                </div>
                 <div className="font-semibold text-sm">Income</div>
                 {formData.type === 'income' && (
                   <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
@@ -71,7 +78,9 @@ export default function TransactionModal({
                     : 'border-ink-200 dark:border-ink-700 hover:border-rose-300 dark:hover:border-rose-700'
                 }`}
               >
-                <div className="text-3xl mb-2">💸</div>
+                <div className="mb-2 flex justify-center">
+                  <ExpenseIcon className="w-8 h-8 text-rose-600 dark:text-rose-400" />
+                </div>
                 <div className="font-semibold text-sm">Expense</div>
                 {formData.type === 'expense' && (
                   <div className="text-xs text-rose-600 dark:text-rose-400 mt-1">
@@ -82,8 +91,9 @@ export default function TransactionModal({
             </div>
             {editingTransaction && editingTransaction.type !== formData.type && (
               <div className="mt-2 p-2 rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
-                <p className="text-xs text-brand-700 dark:text-brand-300">
-                  ⚠️ Type changed from <strong>{editingTransaction.type}</strong> to <strong>{formData.type}</strong>
+                <p className="text-xs text-brand-700 dark:text-brand-300 flex items-center gap-1">
+                  <WarningIcon className="w-4 h-4" />
+                  Type changed from <strong>{editingTransaction.type}</strong> to <strong>{formData.type}</strong>
                 </p>
               </div>
             )}

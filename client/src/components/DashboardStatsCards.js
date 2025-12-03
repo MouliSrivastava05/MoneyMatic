@@ -1,4 +1,9 @@
 import React from 'react';
+import IncomeIcon from '../icons/IncomeIcon';
+import ExpenseIcon from '../icons/ExpenseIcon';
+import SavingsIcon from '../icons/SavingsIcon';
+import ChartDownIcon from '../icons/ChartDownIcon';
+import ChartIcon from '../icons/ChartIcon';
 
 export default function DashboardStatsCards({ budgetData }) {
   const formatCurrency = (amount) => {
@@ -26,7 +31,7 @@ export default function DashboardStatsCards({ budgetData }) {
     {
       label: 'Total Income',
       value: formatCurrency(totalIncome),
-      icon: '💰',
+      Icon: IncomeIcon,
       color: 'emerald',
       badge: 'Income',
       gradient: 'from-emerald-500/20 to-emerald-600/10',
@@ -38,7 +43,7 @@ export default function DashboardStatsCards({ budgetData }) {
     {
       label: 'Total Expenses',
       value: formatCurrency(totalExpenses),
-      icon: '💸',
+      Icon: ExpenseIcon,
       color: 'rose',
       badge: 'Expenses',
       gradient: 'from-rose-500/20 to-rose-600/10',
@@ -51,7 +56,7 @@ export default function DashboardStatsCards({ budgetData }) {
     {
       label: 'Net Balance',
       value: formatCurrency(totalBalance),
-      icon: totalBalance >= 0 ? '💵' : '📉',
+      Icon: totalBalance >= 0 ? SavingsIcon : ChartDownIcon,
       color: totalBalance >= 0 ? 'emerald' : 'rose',
       badge: totalBalance >= 0 ? 'Savings' : 'Deficit',
       gradient: totalBalance >= 0 
@@ -71,7 +76,7 @@ export default function DashboardStatsCards({ budgetData }) {
     {
       label: 'Savings Rate',
       value: `${savingsRate}%`,
-      icon: '📊',
+      Icon: ChartIcon,
       color: 'brand',
       badge: 'Rate',
       gradient: 'from-brand-500/20 to-brand-600/10',
@@ -96,7 +101,7 @@ export default function DashboardStatsCards({ budgetData }) {
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
               <div className={`h-14 w-14 rounded-2xl ${card.iconBg} flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300`}>
-                <span className="text-3xl">{card.icon}</span>
+                <card.Icon className="w-8 h-8 text-white" />
               </div>
               <span className={`text-xs font-semibold ${card.badgeColor} px-3 py-1.5 rounded-full backdrop-blur-sm`}>
                 {card.badge}
