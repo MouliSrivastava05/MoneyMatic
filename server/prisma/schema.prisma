@@ -4,19 +4,18 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
   id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(100)
+  email        String        @unique @db.VarChar(100)
+  password     String        @db.VarChar(255)
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
   budgets      Budget[]
   reminders    Reminder[]
   transactions Transaction[]
-  name         String
-  email        String        @unique
-  password     String
 }
 
 model Transaction {
