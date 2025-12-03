@@ -1,20 +1,5 @@
 import React from 'react';
 
-const highlights = [
-  {
-    title: 'Real-time picture',
-    detail: 'Budgets, reminders, and live transactions in one calm view.',
-  },
-  {
-    title: 'Smart nudges',
-    detail: 'Spot overspending and upcoming bills before they become stress.',
-  },
-  {
-    title: 'Actionable insights',
-    detail: 'Search and filter to understand the story behind every rupee.',
-  },
-];
-
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
