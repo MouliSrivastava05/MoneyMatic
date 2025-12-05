@@ -1,8 +1,8 @@
-# MoneyMatic 💰
+# MoneyMatic 
 
 A modern, intuitive personal finance management application built with React, Node.js, Express, and MySQL. MoneyMatic helps you track expenses, manage budgets, and keep your finances organized in one calm, approachable place.
 
-## 🌟 Features
+##  Features
 
 - **User Authentication**: Secure signup/login with JWT tokens
 - **Dashboard**: See your complete financial snapshot at a glance
@@ -12,7 +12,7 @@ A modern, intuitive personal finance management application built with React, No
 - **Privacy First**: Data encryption and export controls in your hands
 - **Shared Spaces**: Invite family or teammates with role-based permissions
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React** - UI framework
@@ -31,7 +31,7 @@ A modern, intuitive personal finance management application built with React, No
 - **CORS** - Cross-origin requests
 - **dotenv** - Environment configuration
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 MoneyMatic/
@@ -62,11 +62,11 @@ MoneyMatic/
 
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v14 or higher)
-- npm or yarn
+- npm 
 - MySQL database
 - Git
 
@@ -127,7 +127,7 @@ MoneyMatic/
    ```
    App will open at `http://localhost:3000`
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 ### How JWT Works in MoneyMatic
 
@@ -157,7 +157,7 @@ MoneyMatic/
 - **Token**: Stored in browser `localStorage` with key `"token"`
 - **User Data**: Stored in browser `localStorage` with key `"user"`
 
-## 📊 Database Schema
+##  Database Schema
 
 ### User Model
 ```prisma
@@ -171,7 +171,7 @@ model User {
 }
 ```
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### Authentication
 
@@ -183,16 +183,16 @@ model User {
 - Request: `{ email, password }`
 - Response: `{ token, user: { id, name, email } }`
 
-## 🛡️ Security Features
+##  Security Features
 
-- ✅ Password hashing with bcryptjs
-- ✅ JWT-based stateless authentication
-- ✅ CORS protection
-- ✅ Environment variable management
-- ✅ Input validation
-- ✅ Unique email constraint in database
+-  Password hashing with bcryptjs
+-  JWT-based stateless authentication
+-  CORS protection
+-  Environment variable management
+-  Input validation
+-  Unique email constraint in database
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### "Database connection failed"
 - Ensure MySQL is running
@@ -213,7 +213,7 @@ model User {
 - Verify signup/login response contains `token`
 - Check browser console for API errors
 
-## 📦 Build & Deployment
+##  Build & Deployment
 
 ### Build Frontend
 ```bash
@@ -253,4 +253,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**MoneyMatic** - Keep finance simple, steady, and in your control. 💚
+**MoneyMatic** - Keep finance simple, steady, and in your control.

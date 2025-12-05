@@ -1,5 +1,7 @@
 {
-  "prisma.prismaFmtBinPath": "",
-  "prisma.showPrismaDataPlatformNotification": false
+  "prisma.prismaFmtBinPath": "${workspaceFolder}/server/node_modules/.bin/prisma",
+  "prisma.showPrismaDataPlatformNotification": false,
+  "prisma.validate": true
 }
+
 

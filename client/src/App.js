@@ -19,11 +19,11 @@ function Home() {
         <Link to="/" className="flex items-center gap-3 rounded-full border border-white/60 bg-white/70 px-4 py-2 shadow-soft">
           <AnimatedLogo size="sm" />
           <span className="font-display text-lg tracking-tight text-ink-900">MoneyMatic</span>
-        </Link>
+          </Link>
         <div className="hidden items-center gap-3 md:flex">
           <button onClick={() => navigate('/login')} className="btn-ghost text-sm">
-            Sign in
-          </button>
+              Sign in
+            </button>
           <button onClick={() => navigate('/signup')} className="btn-primary text-sm">
             Create account
           </button>
@@ -35,19 +35,19 @@ function Home() {
           <span className="pill">Personal finance OS</span>
           <h1 className="font-display text-4xl font-semibold tracking-tight text-ink-900 dark:text-white md:text-5xl">
             Sleek budgeting meets intentional spending.
-          </h1>
+              </h1>
           <p className="text-lg text-ink-600 dark:text-ink-300">
             MoneyMatic blends dashboards, transactions, budgets, and reminders into one calm command center.
-          </p>
+              </p>
           <div className="flex flex-wrap gap-3">
             <button onClick={() => navigate('/signup')} className="btn-primary px-6 py-3 text-base">
               Get started free
             </button>
             <button onClick={() => navigate('/login')} className="btn-outline px-6 py-3 text-base">
               Sign in
-            </button>
+                </button>
           </div>
-        </div>
+              </div>
         <div className="flex-1 space-y-4">
           <div className="card">
             <div className="flex items-center justify-between text-sm text-ink-500">
@@ -55,7 +55,7 @@ function Home() {
               <span>Live</span>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4">
-              {[
+                  {[
                 { label: 'Income', value: '$8,210', tone: 'text-emerald-500' },
                 { label: 'Expenses', value: '$4,120', tone: 'text-rose-500' },
                 { label: 'Savings', value: '$2,050', tone: 'text-brand-600' },
@@ -63,10 +63,10 @@ function Home() {
                 <div key={kpi.label} className="rounded-2xl border border-ink-100/80 p-4 dark:border-ink-700/80">
                   <p className="text-xs uppercase tracking-wide text-ink-400">{kpi.label}</p>
                   <p className={`text-xl font-semibold ${kpi.tone}`}>{kpi.value}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
           <div className="card flex items-center justify-between">
             <div>
               <p className="text-sm text-ink-500">Automation layers</p>
