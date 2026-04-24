@@ -7,3 +7,6 @@ node_modules
 /generated/prisma
 prisma/migrations
 
+# Local SQLite databases
+*.db
+*.db-journal

@@ -3,7 +3,6 @@ import { CATEGORY_OPTIONS } from '../constants/categories';
 import IncomeIcon from '../icons/IncomeIcon';
 import ExpenseIcon from '../icons/ExpenseIcon';
 import WarningIcon from '../icons/WarningIcon';
-import CloseIcon from '../icons/CloseIcon';
 
 export default function TransactionModal({
   show,
@@ -16,161 +15,148 @@ export default function TransactionModal({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="card max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="modal-overlay">
+      <div className="modal-panel animate-scale-in">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-ink-900 dark:text-ink-100">
+            <h2 className="text-xl font-bold text-white">
               {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
             </h2>
             {editingTransaction && (
-              <p className="text-sm text-ink-500 dark:text-ink-400 mt-1">
-                You can change the type (Income/Expense) and all other fields
+              <p className="text-sm text-ink-400 mt-1">
+                Modify transaction details
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300"
-            aria-label="Close"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-500 hover:bg-white/5 hover:text-white transition-colors"
           >
-            <CloseIcon className="w-5 h-5" />
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4">
-          {/* Type */}
+        <form onSubmit={onSubmit} className="space-y-5">
+          {/* Type Toggle */}
           <div>
-            <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Transaction Type
-              {editingTransaction && (
-                <span className="ml-2 text-xs text-ink-500 dark:text-ink-400">
-                  (Click to change)
-                </span>
-              )}
+            <label className="block text-sm font-semibold text-ink-300 mb-2">
+              Type
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => onFormChange('type', 'income')}
-                className={`p-4 rounded-xl border-2 transition-all ${
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${
                   formData.type === 'income'
-                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-md'
-                    : 'border-ink-200 dark:border-ink-700 hover:border-emerald-300 dark:hover:border-emerald-700'
+                    ? 'border-emerald-500/50 bg-emerald-500/10'
+                    : 'border-white/10 bg-white/5 hover:border-emerald-500/30'
                 }`}
               >
-                <div className="mb-2 flex justify-center">
-                  <IncomeIcon className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${formData.type === 'income' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-ink-800 text-ink-500'}`}>
+                  <IncomeIcon className="w-5 h-5" />
                 </div>
-                <div className="font-semibold text-sm">Income</div>
-                {formData.type === 'income' && (
-                  <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
-                    Selected
-                  </div>
-                )}
+                <span className={`text-sm font-semibold ${formData.type === 'income' ? 'text-emerald-400' : 'text-ink-400'}`}>
+                  Income
+                </span>
               </button>
+
               <button
                 type="button"
                 onClick={() => onFormChange('type', 'expense')}
-                className={`p-4 rounded-xl border-2 transition-all ${
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${
                   formData.type === 'expense'
-                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 shadow-md'
-                    : 'border-ink-200 dark:border-ink-700 hover:border-rose-300 dark:hover:border-rose-700'
+                    ? 'border-rose-500/50 bg-rose-500/10'
+                    : 'border-white/10 bg-white/5 hover:border-rose-500/30'
                 }`}
               >
-                <div className="mb-2 flex justify-center">
-                  <ExpenseIcon className="w-8 h-8 text-rose-600 dark:text-rose-400" />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${formData.type === 'expense' ? 'bg-rose-500/20 text-rose-400' : 'bg-ink-800 text-ink-500'}`}>
+                  <ExpenseIcon className="w-5 h-5" />
                 </div>
-                <div className="font-semibold text-sm">Expense</div>
-                {formData.type === 'expense' && (
-                  <div className="text-xs text-rose-600 dark:text-rose-400 mt-1">
-                    Selected
-                  </div>
-                )}
+                <span className={`text-sm font-semibold ${formData.type === 'expense' ? 'text-rose-400' : 'text-ink-400'}`}>
+                  Expense
+                </span>
               </button>
             </div>
+            
             {editingTransaction && editingTransaction.type !== formData.type && (
-              <div className="mt-2 p-2 rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
-                <p className="text-xs text-brand-700 dark:text-brand-300 flex items-center gap-1">
-                  <WarningIcon className="w-4 h-4" />
-                  Type changed from <strong>{editingTransaction.type}</strong> to <strong>{formData.type}</strong>
+              <div className="mt-3 flex items-start gap-2 rounded-lg bg-amber-500/10 p-3 border border-amber-500/20">
+                <WarningIcon className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-300">
+                  Changing type from <strong className="font-bold">{editingTransaction.type}</strong> to <strong className="font-bold">{formData.type}</strong>
                 </p>
               </div>
             )}
           </div>
 
-          {/* Amount */}
-          <div>
-            <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Amount
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              required
-              value={formData.amount}
-              onChange={(e) => onFormChange('amount', e.target.value)}
-              className="input"
-              placeholder="0.00"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            {/* Amount */}
+            <div>
+              <label className="block text-sm font-semibold text-ink-300 mb-2">Amount</label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-500 font-mono">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  required
+                  value={formData.amount}
+                  onChange={(e) => onFormChange('amount', e.target.value)}
+                  className="input pl-8 font-mono"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="block text-sm font-semibold text-ink-300 mb-2">Date</label>
+              <input
+                type="date"
+                required
+                value={formData.date}
+                onChange={(e) => onFormChange('date', e.target.value)}
+                className="input"
+              />
+            </div>
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Category
-            </label>
+            <label className="block text-sm font-semibold text-ink-300 mb-2">Category</label>
             <select
               required
               value={formData.category}
               onChange={(e) => onFormChange('category', e.target.value)}
               className="input"
             >
-              <option value="">Select a category</option>
+              <option value="" disabled>Select category</option>
               {CATEGORY_OPTIONS.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Description
-            </label>
+            <label className="block text-sm font-semibold text-ink-300 mb-2">Description</label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => onFormChange('description', e.target.value)}
               className="input"
-              placeholder="Add a description (optional)"
+              placeholder="e.g. Grocery shopping"
             />
           </div>
 
-          {/* Date */}
-          <div>
-            <label className="block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2">
-              Date
-            </label>
-            <input
-              type="date"
-              required
-              value={formData.date}
-              onChange={(e) => onFormChange('date', e.target.value)}
-              className="input"
-            />
-          </div>
-
-          {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4">
+          {/* Actions */}
+          <div className="flex gap-3 pt-4 border-t border-white/[0.06] mt-6">
             <button type="button" onClick={onClose} className="btn-ghost flex-1">
               Cancel
             </button>
             <button type="submit" className="btn-primary flex-1">
-              {editingTransaction ? 'Update' : 'Add'} Transaction
+              {editingTransaction ? 'Save Changes' : 'Add Transaction'}
             </button>
           </div>
         </form>
@@ -178,4 +164,3 @@ export default function TransactionModal({
     </div>
   );
 }
-

@@ -36,7 +36,6 @@ export default function Pagination({ pagination, onPageChange }) {
         pages.push(totalPages);
       }
     }
-    
     return pages;
   };
 
@@ -44,36 +43,36 @@ export default function Pagination({ pagination, onPageChange }) {
   const endItem = Math.min(page * limit, total);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-ink-200 dark:border-ink-700">
-      <div className="text-sm text-ink-600 dark:text-ink-400">
-        Showing <span className="font-medium text-ink-900 dark:text-ink-100">{startItem}</span> to{' '}
-        <span className="font-medium text-ink-900 dark:text-ink-100">{endItem}</span> of{' '}
-        <span className="font-medium text-ink-900 dark:text-ink-100">{total}</span> transactions
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-white/[0.06]">
+      <div className="text-sm text-ink-400">
+        Showing <span className="font-semibold text-white">{startItem}</span> to{' '}
+        <span className="font-semibold text-white">{endItem}</span> of{' '}
+        <span className="font-semibold text-brand-400">{total}</span> transactions
       </div>
       
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl border border-white/10">
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="btn-ghost text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg px-3 py-1.5 text-sm font-medium text-ink-300 hover:bg-white/10 hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-ink-300"
         >
-          ← Previous
+          Prev
         </button>
         
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 px-2 border-x border-white/10">
           {getPageNumbers().map((pageNum, index) => (
             pageNum === '...' ? (
-              <span key={`ellipsis-${index}`} className="px-2 text-ink-400">
+              <span key={`ellipsis-${index}`} className="px-2 text-ink-500 font-bold">
                 ...
               </span>
             ) : (
               <button
                 key={pageNum}
                 onClick={() => onPageChange(pageNum)}
-                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                className={`min-w-[32px] px-2 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
                   page === pageNum
-                    ? 'bg-brand-500 text-white'
-                    : 'bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-700'
+                    ? 'bg-brand-500 text-white shadow-brand'
+                    : 'text-ink-400 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {pageNum}
@@ -85,12 +84,11 @@ export default function Pagination({ pagination, onPageChange }) {
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="btn-ghost text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg px-3 py-1.5 text-sm font-medium text-ink-300 hover:bg-white/10 hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-ink-300"
         >
-          Next →
+          Next
         </button>
       </div>
     </div>
   );
 }
-

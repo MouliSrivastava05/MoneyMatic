@@ -265,20 +265,27 @@ export default function Transactions() {
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
-            <span className="ml-4 text-ink-600 dark:text-ink-400 text-lg">Loading transactions...</span>
+          <div className="flex flex-col items-center justify-center py-24 space-y-5">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-16 w-16 border-2 border-brand-500/20 border-t-brand-500"></div>
+              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-emerald-400 animate-spin" style={{ animationDuration: '1.5s' }}></div>
+            </div>
+            <p className="text-ink-400 font-medium tracking-wide">Gathering transactions...</p>
           </div>
         ) : error ? (
-          <div className="card bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800">
-            <div className="flex items-center gap-3">
-              <WarningIcon className="w-8 h-8 text-rose-600 dark:text-rose-400" />
-              <div>
-                <p className="text-rose-700 dark:text-rose-300 font-medium">{error}</p>
-                <button onClick={fetchTransactions} className="mt-3 btn-ghost text-sm">
-                  Retry
-                </button>
+          <div className="card border-rose-500/20 bg-rose-500/[0.05] animate-scale-in">
+            <div className="flex flex-col items-center justify-center text-center py-10">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-500/10 mb-4">
+                <WarningIcon className="w-8 h-8 text-rose-400" />
               </div>
+              <p className="text-rose-400 font-bold text-lg mb-2">Connection Error</p>
+              <p className="text-ink-400 max-w-md mb-6">{error}</p>
+              <button
+                onClick={fetchTransactions}
+                className="btn-danger"
+              >
+                Try Again
+              </button>
             </div>
           </div>
         ) : transactions.length === 0 && !hasActiveFilters() ? (

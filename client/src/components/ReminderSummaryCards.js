@@ -1,6 +1,9 @@
 import React from 'react';
+import BellIcon from '../icons/BellIcon';
+import WarningIcon from '../icons/WarningIcon';
+import ChartIcon from '../icons/ChartIcon';
 
-const formatCurrency = (amount) =>
+const fmt = (amount) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -25,49 +28,92 @@ export default function ReminderSummaryCards({ reminders = [] }) {
     activeReminders.filter((reminder) => new Date(reminder.dueDate) >= new Date())
   );
 
+  const cards = [
+    {
+      label: 'Active Reminders',
+      value: activeReminders.length,
+      Icon: BellIcon,
+      gradient: 'from-brand-500/[0.12] to-brand-600/[0.06]',
+      border: 'border-brand-500/20',
+      iconBg: 'bg-brand-500/15 text-brand-400',
+      valueColor: 'text-brand-400',
+      badge: 'badge-brand',
+    },
+    {
+      label: 'Total Amount Due',
+      value: fmt(totalDue),
+      Icon: ChartIcon,
+      gradient: 'from-amber-500/[0.12] to-amber-600/[0.06]',
+      border: 'border-amber-500/20',
+      iconBg: 'bg-amber-500/15 text-amber-400',
+      valueColor: 'text-amber-400',
+      badge: 'badge-neutral',
+    },
+    {
+      label: 'Overdue',
+      value: overdueCount,
+      Icon: WarningIcon,
+      gradient: overdueCount > 0 ? 'from-rose-500/[0.12] to-rose-600/[0.06]' : 'from-ink-500/[0.12] to-ink-600/[0.06]',
+      border: overdueCount > 0 ? 'border-rose-500/20' : 'border-ink-500/20',
+      iconBg: overdueCount > 0 ? 'bg-rose-500/15 text-rose-400' : 'bg-ink-500/15 text-ink-400',
+      valueColor: overdueCount > 0 ? 'text-rose-400' : 'text-ink-400',
+      badge: overdueCount > 0 ? 'badge-danger' : 'badge-neutral',
+    },
+  ];
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-      <div className="card border-brand-200/80 bg-gradient-to-br from-brand-50 to-brand-100 dark:border-brand-900/30 dark:from-brand-900/20 dark:to-brand-800/10">
-        <p className="text-sm font-medium text-ink-500 dark:text-ink-400">Active Reminders</p>
-        <p className="mt-2 text-3xl font-semibold text-brand-700 dark:text-brand-300">
-          {activeReminders.length}
-        </p>
-      </div>
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          className={`group relative overflow-hidden rounded-2xl border ${card.border} bg-gradient-to-br ${card.gradient} backdrop-blur-sm p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated`}
+        >
+          {/* Ambient glow on hover */}
+          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{ background: `radial-gradient(circle at 50% 0%, rgba(20,184,166,0.08), transparent 70%)` }} />
 
-      <div className="card border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:border-emerald-900/30 dark:from-emerald-900/20 dark:to-emerald-800/10">
-        <p className="text-sm font-medium text-ink-500 dark:text-ink-400">Total Amount Due</p>
-        <p className="mt-2 text-3xl font-semibold text-emerald-700 dark:text-emerald-300">
-          {formatCurrency(totalDue)}
-        </p>
-      </div>
-
-      <div className="card border-rose-200/80 bg-gradient-to-br from-rose-50 to-rose-100 dark:border-rose-900/30 dark:from-rose-900/20 dark:to-rose-800/10">
-        <p className="text-sm font-medium text-ink-500 dark:text-ink-400">Overdue</p>
-        <p className="mt-2 text-3xl font-semibold text-rose-600 dark:text-rose-300">
-          {overdueCount}
-        </p>
-      </div>
-
-      <div className="card border-ink-200/80 bg-gradient-to-br from-ink-50 to-ink-100 dark:border-ink-800/40 dark:from-ink-900/40 dark:to-ink-800/20">
-        <p className="text-sm font-medium text-ink-500 dark:text-ink-400">Next Reminder</p>
-        {nextReminder ? (
-          <div className="mt-2">
-            <p className="text-lg font-semibold text-ink-900 dark:text-ink-100">
-              {nextReminder.title}
-            </p>
-            <p className="text-sm text-ink-500 dark:text-ink-400">
-              {new Date(nextReminder.dueDate).toLocaleDateString(undefined, {
-                month: 'short',
-                day: 'numeric',
-              })}
-            </p>
+          <div className="flex items-center justify-between mb-4">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
+              <card.Icon className="h-5 w-5" />
+            </div>
+            <span className={card.badge}>{card.label}</span>
           </div>
-        ) : (
-          <p className="mt-2 text-lg font-semibold text-ink-400 dark:text-ink-500">No upcoming</p>
-        )}
+
+          <p className={`text-3xl font-bold font-mono tracking-tight ${card.valueColor} mb-1`}>
+            {card.value}
+          </p>
+          <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full opacity-20 blur-2xl bg-current ${card.valueColor}`} />
+        </div>
+      ))}
+
+      {/* Next Reminder Card */}
+      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/[0.12] to-indigo-600/[0.06] backdrop-blur-sm p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated">
+          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{ background: `radial-gradient(circle at 50% 0%, rgba(99,102,241,0.08), transparent 70%)` }} />
+          
+          <div className="flex items-center justify-between mb-4">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-400 transition-transform duration-300 group-hover:scale-110`}>
+              <BellIcon className="h-5 w-5" />
+            </div>
+            <span className="badge-neutral">Next</span>
+          </div>
+
+          {nextReminder ? (
+            <div>
+              <p className="text-lg font-bold text-indigo-400 mb-1 truncate">{nextReminder.title}</p>
+              <p className="text-sm text-indigo-300/70 font-mono">
+                {new Date(nextReminder.dueDate).toLocaleDateString(undefined, {
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </p>
+            </div>
+          ) : (
+            <p className="text-lg font-semibold text-ink-500">No upcoming</p>
+          )}
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full opacity-20 blur-2xl bg-current text-indigo-400" />
       </div>
+
     </div>
   );
 }
-
-

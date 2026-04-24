@@ -5,129 +5,116 @@ import SavingsIcon from '../icons/SavingsIcon';
 import ChartDownIcon from '../icons/ChartDownIcon';
 import ChartIcon from '../icons/ChartIcon';
 
+const fmt = (n) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD',
+    minimumFractionDigits: 0, maximumFractionDigits: 0,
+  }).format(n || 0);
+
+const CARDS_META = (totalIncome, totalExpenses, totalBalance, savingsRate, expenseRatio) => [
+  {
+    label: 'Total Income',
+    value: fmt(totalIncome),
+    Icon: IncomeIcon,
+    accentColor: 'emerald',
+    gradient: 'from-emerald-500/[0.12] to-emerald-600/[0.06]',
+    border: 'border-emerald-500/20',
+    iconBg: 'bg-emerald-500/15 text-emerald-400',
+    valueColor: 'text-emerald-400',
+    badge: 'badge-success',
+    badgeLabel: 'Income',
+    sub: null,
+  },
+  {
+    label: 'Total Expenses',
+    value: fmt(totalExpenses),
+    Icon: ExpenseIcon,
+    accentColor: 'rose',
+    gradient: 'from-rose-500/[0.12] to-rose-600/[0.06]',
+    border: 'border-rose-500/20',
+    iconBg: 'bg-rose-500/15 text-rose-400',
+    valueColor: 'text-rose-400',
+    badge: 'badge-danger',
+    badgeLabel: 'Expenses',
+    sub: totalIncome > 0 ? `${expenseRatio}% of income` : null,
+  },
+  {
+    label: 'Net Balance',
+    value: fmt(totalBalance),
+    Icon: totalBalance >= 0 ? SavingsIcon : ChartDownIcon,
+    accentColor: totalBalance >= 0 ? 'emerald' : 'rose',
+    gradient: totalBalance >= 0 ? 'from-emerald-500/[0.12] to-emerald-600/[0.06]' : 'from-rose-500/[0.12] to-rose-600/[0.06]',
+    border: totalBalance >= 0 ? 'border-emerald-500/20' : 'border-rose-500/20',
+    iconBg: totalBalance >= 0 ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400',
+    valueColor: totalBalance >= 0 ? 'text-emerald-400' : 'text-rose-400',
+    badge: totalBalance >= 0 ? 'badge-success' : 'badge-danger',
+    badgeLabel: totalBalance >= 0 ? 'Savings' : 'Deficit',
+    sub: null,
+  },
+  {
+    label: 'Savings Rate',
+    value: `${savingsRate}%`,
+    Icon: ChartIcon,
+    accentColor: 'brand',
+    gradient: 'from-brand-500/[0.12] to-brand-600/[0.06]',
+    border: 'border-brand-500/20',
+    iconBg: 'bg-brand-500/15 text-brand-400',
+    valueColor: 'text-brand-400',
+    badge: 'badge-brand',
+    badgeLabel: 'Rate',
+    sub: totalIncome > 0 ? `${(100 - parseFloat(expenseRatio)).toFixed(1)}% surplus` : 'No income yet',
+  },
+];
+
 export default function DashboardStatsCards({ budgetData }) {
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount || 0);
-  };
-
-  const totalIncome = budgetData?.summary?.totalIncome || 0;
+  const totalIncome   = budgetData?.summary?.totalIncome   || 0;
   const totalExpenses = budgetData?.summary?.totalExpenses || 0;
-  const totalBalance = totalIncome - totalExpenses;
+  const totalBalance  = totalIncome - totalExpenses;
 
-  const savingsRate = totalIncome > 0
-    ? ((totalBalance / totalIncome) * 100).toFixed(1)
-    : 0;
+  const savingsRate  = totalIncome > 0 ? ((totalBalance  / totalIncome) * 100).toFixed(1) : 0;
+  const expenseRatio = totalIncome > 0 ? ((totalExpenses / totalIncome) * 100).toFixed(1) : 0;
 
-  const expenseRatio = totalIncome > 0
-    ? ((totalExpenses / totalIncome) * 100).toFixed(1)
-    : 0;
-
-  const cards = [
-    {
-      label: 'Total Income',
-      value: formatCurrency(totalIncome),
-      Icon: IncomeIcon,
-      color: 'emerald',
-      badge: 'Income',
-      gradient: 'from-emerald-500/20 to-emerald-600/10',
-      borderColor: 'border-emerald-500/30',
-      iconBg: 'bg-emerald-500',
-      textColor: 'text-emerald-600 dark:text-emerald-400',
-      badgeColor: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300',
-    },
-    {
-      label: 'Total Expenses',
-      value: formatCurrency(totalExpenses),
-      Icon: ExpenseIcon,
-      color: 'rose',
-      badge: 'Expenses',
-      gradient: 'from-rose-500/20 to-rose-600/10',
-      borderColor: 'border-rose-500/30',
-      iconBg: 'bg-rose-500',
-      textColor: 'text-rose-600 dark:text-rose-400',
-      badgeColor: 'bg-rose-500/20 text-rose-700 dark:text-rose-300',
-      subtext: `${expenseRatio}% of income`,
-    },
-    {
-      label: 'Net Balance',
-      value: formatCurrency(totalBalance),
-      Icon: totalBalance >= 0 ? SavingsIcon : ChartDownIcon,
-      color: totalBalance >= 0 ? 'emerald' : 'rose',
-      badge: totalBalance >= 0 ? 'Savings' : 'Deficit',
-      gradient: totalBalance >= 0 
-        ? 'from-emerald-500/20 to-emerald-600/10' 
-        : 'from-rose-500/20 to-rose-600/10',
-      borderColor: totalBalance >= 0 
-        ? 'border-emerald-500/30' 
-        : 'border-rose-500/30',
-      iconBg: totalBalance >= 0 ? 'bg-emerald-500' : 'bg-rose-500',
-      textColor: totalBalance >= 0 
-        ? 'text-emerald-600 dark:text-emerald-400' 
-        : 'text-rose-600 dark:text-rose-400',
-      badgeColor: totalBalance >= 0
-        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
-        : 'bg-rose-500/20 text-rose-700 dark:text-rose-300',
-    },
-    {
-      label: 'Savings Rate',
-      value: `${savingsRate}%`,
-      Icon: ChartIcon,
-      color: 'brand',
-      badge: 'Rate',
-      gradient: 'from-brand-500/20 to-brand-600/10',
-      borderColor: 'border-brand-500/30',
-      iconBg: 'bg-brand-500',
-      textColor: 'text-brand-600 dark:text-brand-400',
-      badgeColor: 'bg-brand-500/20 text-brand-700 dark:text-brand-300',
-      subtext: totalIncome > 0 ? `${(100 - parseFloat(expenseRatio)).toFixed(1)}% remaining` : 'No income',
-    },
-  ];
+  const cards = CARDS_META(totalIncome, totalExpenses, totalBalance, savingsRate, expenseRatio);
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {cards.map((card, index) => (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {cards.map((card, i) => (
         <div
-          key={index}
-          className={`group relative overflow-hidden rounded-2xl border-2 ${card.borderColor} bg-gradient-to-br ${card.gradient} backdrop-blur-sm p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-${card.color}-500/20`}
+          key={i}
+          className={`group relative overflow-hidden rounded-2xl border ${card.border} bg-gradient-to-br ${card.gradient} backdrop-blur-sm p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated`}
+          style={{ animationDelay: `${i * 0.07}s` }}
         >
-          {/* Animated background glow */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl`} />
-          
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`h-14 w-14 rounded-2xl ${card.iconBg} flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300`}>
-                <card.Icon className="w-8 h-8 text-white" />
-              </div>
-              <span className={`text-xs font-semibold ${card.badgeColor} px-3 py-1.5 rounded-full backdrop-blur-sm`}>
-                {card.badge}
-              </span>
+          {/* Ambient glow on hover */}
+          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{ background: `radial-gradient(circle at 50% 0%, rgba(20,184,166,0.08), transparent 70%)` }} />
+
+          {/* Top row: icon + badge */}
+          <div className="flex items-center justify-between mb-4">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
+              <card.Icon className="h-5 w-5" />
             </div>
-            
-            <h3 className="text-sm font-medium text-ink-600 dark:text-ink-400 mb-2 uppercase tracking-wide">
-              {card.label}
-            </h3>
-            
-            <p className={`text-4xl font-bold ${card.textColor} mb-2 transition-all duration-300`}>
-              {card.value}
-            </p>
-            
-            {card.subtext && (
-              <p className="text-xs text-ink-500 dark:text-ink-400 font-medium">
-                {card.subtext}
-              </p>
-            )}
+            <span className={card.badge}>{card.badgeLabel}</span>
           </div>
 
-          {/* Decorative corner element */}
-          <div className={`absolute -bottom-8 -right-8 h-24 w-24 rounded-full ${card.iconBg} opacity-10 blur-2xl`} />
+          {/* Label */}
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-500 mb-1.5">
+            {card.label}
+          </p>
+
+          {/* Value */}
+          <p className={`text-3xl font-bold font-mono tracking-tight ${card.valueColor} mb-1`}>
+            {card.value}
+          </p>
+
+          {/* Subtext */}
+          {card.sub && (
+            <p className="text-xs text-ink-500 font-medium">{card.sub}</p>
+          )}
+
+          {/* Decorative corner blob */}
+          <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full opacity-20 blur-2xl bg-current ${card.valueColor}`} />
         </div>
       ))}
     </div>
   );
 }
-

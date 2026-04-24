@@ -205,22 +205,35 @@ export default function Budgets() {
         />
 
         {error && (
-          <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-700 dark:border-rose-900/40 dark:bg-rose-900/30 dark:text-rose-200">
-            <p className="font-semibold">Something went wrong</p>
-            <p className="text-sm">{error}</p>
-            <button
-              type="button"
-              className="mt-3 text-sm font-medium text-rose-600 underline dark:text-rose-300"
-              onClick={fetchBudgets}
-            >
-              Try Again
-            </button>
+          <div className="card border-rose-500/20 bg-rose-500/[0.05] mb-6 animate-scale-in">
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-rose-500/10">
+                <svg className="h-5 w-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-rose-400">Loading Error</p>
+                <p className="text-sm text-ink-400 mt-1">{error}</p>
+                <button
+                  type="button"
+                  className="mt-3 text-sm font-semibold text-rose-400 hover:text-rose-300 transition-colors"
+                  onClick={fetchBudgets}
+                >
+                  Try Again →
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-ink-200 border-t-brand-500" />
+          <div className="flex flex-col items-center justify-center py-24 space-y-5">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-16 w-16 border-2 border-brand-500/20 border-t-brand-500"></div>
+              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-emerald-400 animate-spin" style={{ animationDuration: '1.5s' }}></div>
+            </div>
+            <p className="text-ink-400 font-medium tracking-wide">Crunching numbers...</p>
           </div>
         ) : (
           <>

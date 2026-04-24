@@ -133,27 +133,27 @@ export default function Dashboard() {
             </div>
           )}
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+            <div className="flex flex-col items-center justify-center py-24 space-y-5">
               <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-brand-200 dark:border-brand-800 border-t-brand-600"></div>
-                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-brand-400 animate-spin" style={{ animationDuration: '0.75s' }}></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-2 border-brand-500/20 border-t-brand-500"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-emerald-400 animate-spin" style={{ animationDuration: '1.5s' }}></div>
               </div>
-              <p className="text-ink-600 dark:text-ink-400 text-lg font-medium">Loading your finances...</p>
-              <p className="text-sm text-ink-500 dark:text-ink-500">Gathering insights from your data</p>
+              <p className="text-ink-400 font-medium tracking-wide">Syncing your financial world...</p>
             </div>
           ) : error ? (
-            <div className="card bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800 animate-pulse">
-              <div className="flex items-center gap-4">
-                <WarningIcon className="w-12 h-12 text-rose-600 dark:text-rose-400 flex-shrink-0" />
-                <div className="flex-1">
-                  <p className="text-rose-700 dark:text-rose-300 font-medium text-lg mb-2">{error}</p>
-                  <button
-                    onClick={fetchDashboardData}
-                    className="btn-primary text-sm mt-2"
-                  >
-                    Retry Loading
-                  </button>
+            <div className="card border-rose-500/20 bg-rose-500/[0.05] animate-scale-in">
+              <div className="flex flex-col items-center justify-center text-center py-10">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-500/10 mb-4">
+                  <WarningIcon className="w-8 h-8 text-rose-400" />
                 </div>
+                <p className="text-rose-400 font-bold text-lg mb-2">Connection Error</p>
+                <p className="text-ink-400 max-w-md mb-6">{error}</p>
+                <button
+                  onClick={fetchDashboardData}
+                  className="btn-danger"
+                >
+                  Try Again
+                </button>
               </div>
             </div>
           ) : (
@@ -163,27 +163,23 @@ export default function Dashboard() {
 
               {/* Charts Section */}
               <div className="grid gap-6 lg:grid-cols-2">
-                <div className="transform transition-all duration-300 hover:scale-[1.02]">
-                  <IncomeExpenseChart
-                    income={budgetData?.summary?.totalIncome || 0}
-                    expense={budgetData?.summary?.totalExpenses || 0}
-                    savings={budgetData?.summary?.savings || 0}
-                  />
-                </div>
-                <div className="transform transition-all duration-300 hover:scale-[1.02]">
-                  <CategorySpendingChart
-                    budgets={budgetData?.budgets || []}
-                    spendingByCategory={budgetData?.spendingByCategory || {}}
-                  />
-                </div>
+                <IncomeExpenseChart
+                  income={budgetData?.summary?.totalIncome || 0}
+                  expense={budgetData?.summary?.totalExpenses || 0}
+                  savings={budgetData?.summary?.savings || 0}
+                />
+                <CategorySpendingChart
+                  budgets={budgetData?.budgets || []}
+                  spendingByCategory={budgetData?.spendingByCategory || {}}
+                />
               </div>
 
               {/* Recent Activity Section */}
               <div className="grid gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-2 transform transition-all duration-300 hover:scale-[1.01]">
+                <div className="lg:col-span-2">
                   <RecentTransactions transactions={recentTransactions} />
                 </div>
-                <div className="transform transition-all duration-300 hover:scale-[1.01]">
+                <div>
                   <QuickStats 
                     budgetData={budgetData} 
                     transactionCount={recentTransactions.length}
@@ -192,9 +188,7 @@ export default function Dashboard() {
               </div>
 
               {/* Budget Overview */}
-              <div className="transform transition-all duration-300 hover:scale-[1.01]">
-                <BudgetOverview budgetData={budgetData} />
-              </div>
+              <BudgetOverview budgetData={budgetData} />
             </div>
           )}
         </div>

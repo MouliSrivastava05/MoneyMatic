@@ -1,61 +1,74 @@
 import React from 'react';
 
-const formatCurrency = (amount) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(Number(amount || 0));
+const fmt = (n) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n || 0));
 
 export default function IncomeExpenseChart({ income = 0, expense = 0, savings = 0 }) {
-  const maxValue = Math.max(income, expense, 1);
-  const incomeWidth = Math.round((income / maxValue) * 100);
+  const maxValue     = Math.max(income, expense, 1);
+  const incomeWidth  = Math.round((income  / maxValue) * 100);
   const expenseWidth = Math.round((expense / maxValue) * 100);
+  const savingsRate  = income > 0 ? ((savings / income) * 100).toFixed(0) : 0;
+
+  const bars = [
+    {
+      label: 'Income',
+      value: income,
+      width: incomeWidth,
+      bar: 'bg-gradient-to-r from-emerald-600 to-emerald-400',
+      track: 'bg-emerald-500/10',
+      color: 'text-emerald-400',
+    },
+    {
+      label: 'Expenses',
+      value: expense,
+      width: expenseWidth,
+      bar: 'bg-gradient-to-r from-rose-600 to-rose-400',
+      track: 'bg-rose-500/10',
+      color: 'text-rose-400',
+    },
+  ];
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-4">
+    <div className="card h-full flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <p className="text-sm uppercase tracking-wide text-ink-500 dark:text-ink-400">
-            Income vs Expenses
-          </p>
-          <h3 className="text-xl font-semibold text-ink-900 dark:text-ink-50">Monthly flow</h3>
+          <p className="eyebrow mb-0.5">Cashflow</p>
+          <h3 className="section-title text-xl">Monthly Flow</h3>
         </div>
-        <span className="text-sm font-medium text-emerald-600 dark:text-emerald-300">
-          Savings {formatCurrency(savings)}
-        </span>
+        <div className="text-right">
+          <p className="text-[10px] uppercase tracking-wider text-ink-500 mb-0.5">Net savings</p>
+          <p className={`text-lg font-bold font-mono ${savings >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {fmt(savings)}
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-4">
-        <div>
-          <div className="flex items-center justify-between text-xs font-medium text-ink-500 dark:text-ink-400 mb-1">
-            <span>Income</span>
-            <span>{formatCurrency(income)}</span>
+      {/* Bars */}
+      <div className="flex-1 space-y-5">
+        {bars.map(({ label, value, width, bar, track, color }) => (
+          <div key={label}>
+            <div className="flex items-center justify-between text-sm mb-2">
+              <span className="font-semibold text-ink-300">{label}</span>
+              <span className={`font-bold font-mono ${color}`}>{fmt(value)}</span>
+            </div>
+            <div className={`h-3 rounded-full ${track} overflow-hidden`}>
+              <div
+                className={`h-full rounded-full ${bar} transition-all duration-700 ease-out`}
+                style={{ width: `${width}%` }}
+              />
+            </div>
           </div>
-          <div className="h-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-            <div
-              className="h-3 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 dark:from-emerald-300 dark:to-emerald-500 transition-all"
-              style={{ width: `${incomeWidth}%` }}
-            />
-          </div>
-        </div>
+        ))}
+      </div>
 
-        <div>
-          <div className="flex items-center justify-between text-xs font-medium text-ink-500 dark:text-ink-400 mb-1">
-            <span>Expenses</span>
-            <span>{formatCurrency(expense)}</span>
-          </div>
-          <div className="h-3 rounded-full bg-rose-100 dark:bg-rose-900/30">
-            <div
-              className="h-3 rounded-full bg-gradient-to-r from-rose-400 to-rose-600 dark:from-rose-300 dark:to-rose-500 transition-all"
-              style={{ width: `${expenseWidth}%` }}
-            />
-          </div>
-        </div>
+      {/* Footer metric */}
+      <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between">
+        <span className="text-xs text-ink-500">Savings rate this month</span>
+        <span className={`text-sm font-bold ${Number(savingsRate) >= 20 ? 'text-brand-400' : Number(savingsRate) >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
+          {savingsRate}%
+        </span>
       </div>
     </div>
   );
 }
-
-
-

@@ -1,4 +1,8 @@
 import React from 'react';
+import ChartIcon from '../icons/ChartIcon';
+import WarningIcon from '../icons/WarningIcon';
+import CheckIcon from '../icons/CheckIcon';
+import IncomeIcon from '../icons/IncomeIcon';
 
 export default function BudgetSummaryCards({ budgetData }) {
   const totalBudget = budgetData?.budgets?.reduce(
@@ -14,59 +18,84 @@ export default function BudgetSummaryCards({ budgetData }) {
   const remaining = totalBudget - totalSpent;
   const activeBudgets = budgetData?.budgets?.length || 0;
 
-  const formatCurrency = (amount) =>
+  const fmt = (amount) =>
     new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
     }).format(amount || 0);
 
+  const cards = [
+    {
+      label: 'Total Budget',
+      value: fmt(totalBudget),
+      Icon: ChartIcon,
+      gradient: 'from-brand-500/[0.12] to-brand-600/[0.06]',
+      border: 'border-brand-500/20',
+      iconBg: 'bg-brand-500/15 text-brand-400',
+      valueColor: 'text-brand-400',
+      badge: 'badge-brand',
+    },
+    {
+      label: 'Actual Spending',
+      value: fmt(totalSpent),
+      Icon: WarningIcon,
+      gradient: 'from-rose-500/[0.12] to-rose-600/[0.06]',
+      border: 'border-rose-500/20',
+      iconBg: 'bg-rose-500/15 text-rose-400',
+      valueColor: 'text-rose-400',
+      badge: 'badge-danger',
+    },
+    {
+      label: 'Remaining',
+      value: fmt(remaining),
+      Icon: remaining >= 0 ? CheckIcon : WarningIcon,
+      gradient: remaining >= 0 ? 'from-emerald-500/[0.12] to-emerald-600/[0.06]' : 'from-rose-500/[0.12] to-rose-600/[0.06]',
+      border: remaining >= 0 ? 'border-emerald-500/20' : 'border-rose-500/20',
+      iconBg: remaining >= 0 ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400',
+      valueColor: remaining >= 0 ? 'text-emerald-400' : 'text-rose-400',
+      badge: remaining >= 0 ? 'badge-success' : 'badge-danger',
+    },
+    {
+      label: 'Active Budgets',
+      value: activeBudgets,
+      Icon: IncomeIcon,
+      gradient: 'from-indigo-500/[0.12] to-indigo-600/[0.06]',
+      border: 'border-indigo-500/20',
+      iconBg: 'bg-indigo-500/15 text-indigo-400',
+      valueColor: 'text-indigo-400',
+      badge: 'badge-neutral',
+    },
+  ];
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-      <div className="card bg-gradient-to-br from-brand-50 to-brand-100 dark:from-brand-900/20 dark:to-brand-800/20 border-brand-200 dark:border-brand-800">
-        <h3 className="text-sm font-medium text-ink-600 dark:text-ink-400 mb-2">
-          Total Budget
-        </h3>
-        <p className="text-3xl font-bold text-brand-700 dark:text-brand-300">
-          {formatCurrency(totalBudget)}
-        </p>
-      </div>
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          className={`group relative overflow-hidden rounded-2xl border ${card.border} bg-gradient-to-br ${card.gradient} backdrop-blur-sm p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated`}
+        >
+          {/* Ambient glow on hover */}
+          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{ background: `radial-gradient(circle at 50% 0%, rgba(20,184,166,0.08), transparent 70%)` }} />
 
-      <div className="card bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20 border-rose-200 dark:border-rose-800">
-        <h3 className="text-sm font-medium text-ink-600 dark:text-ink-400 mb-2">
-          Actual Spending
-        </h3>
-        <p className="text-3xl font-bold text-rose-700 dark:text-rose-300">
-          {formatCurrency(totalSpent)}
-        </p>
-      </div>
+          {/* Top row: icon */}
+          <div className="flex items-center justify-between mb-4">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
+              <card.Icon className="h-5 w-5" />
+            </div>
+            <span className={card.badge}>{card.label}</span>
+          </div>
 
-      <div className={`card bg-gradient-to-br ${
-        remaining >= 0
-          ? 'from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border-emerald-200 dark:border-emerald-800'
-          : 'from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20 border-rose-200 dark:border-rose-800'
-      }`}>
-        <h3 className="text-sm font-medium text-ink-600 dark:text-ink-400 mb-2">
-          Remaining
-        </h3>
-        <p className={`text-3xl font-bold ${
-          remaining >= 0
-            ? 'text-emerald-700 dark:text-emerald-300'
-            : 'text-rose-700 dark:text-rose-300'
-        }`}>
-          {formatCurrency(remaining)}
-        </p>
-      </div>
+          {/* Value */}
+          <p className={`text-3xl font-bold font-mono tracking-tight ${card.valueColor} mb-1`}>
+            {card.value}
+          </p>
 
-      <div className="card bg-gradient-to-br from-ink-50 to-ink-100 dark:from-ink-900/20 dark:to-ink-800/20 border-ink-200 dark:border-ink-800">
-        <h3 className="text-sm font-medium text-ink-600 dark:text-ink-400 mb-2">
-          Active Budgets
-        </h3>
-        <p className="text-3xl font-bold text-ink-900 dark:text-ink-100">
-          {activeBudgets}
-        </p>
-      </div>
+          {/* Decorative corner blob */}
+          <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full opacity-20 blur-2xl bg-current ${card.valueColor}`} />
+        </div>
+      ))}
     </div>
   );
 }
-
