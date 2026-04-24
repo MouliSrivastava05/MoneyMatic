@@ -9,6 +9,9 @@ import Reminders from "./pages/Reminders";
 import PersonalFinanceBlog from "./pages/PersonalFinanceBlog";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AnimatedLogo from "./components/AnimatedLogo";
+import ChartIcon from "./icons/ChartIcon";
+import SearchIcon from "./icons/SearchIcon";
+import BellIcon from "./icons/BellIcon";
 
 function Home() {
   const navigate = useNavigate();
@@ -83,16 +86,40 @@ function Home() {
       </section>
 
       <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 pb-16 md:grid-cols-3">
-        {['Smart budgets', 'Deep filters', 'Calm reminders'].map((title) => (
-          <div key={title} className="card hover:shadow-glow transition">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-start to-brand-end" />
-            <h3 className="mt-4 text-xl font-semibold text-ink-900 dark:text-white">{title}</h3>
-            <p className="mt-2 text-sm text-ink-600 dark:text-ink-300">
-              Tools that feel handcrafted, tuned for the way you actually review money.
+        {[
+          {
+            title: 'Smart budgets',
+            description: 'Set custom spending limits and track your progress in real-time with beautiful visual indicators.',
+            Icon: ChartIcon,
+            color: 'text-brand-400',
+            bg: 'bg-brand-500/20 border-brand-500/30'
+          },
+          {
+            title: 'Deep filters',
+            description: 'Instantly drill down into your financial data to find any transaction across any specific timeframe.',
+            Icon: SearchIcon,
+            color: 'text-indigo-400',
+            bg: 'bg-indigo-500/20 border-indigo-500/30'
+          },
+          {
+            title: 'Calm reminders',
+            description: 'Stay ahead of bills and subscriptions with gentle, automated nudges before your due dates arrive.',
+            Icon: BellIcon,
+            color: 'text-emerald-400',
+            bg: 'bg-emerald-500/20 border-emerald-500/30'
+          }
+        ].map(({ title, description, Icon, color, bg }) => (
+          <div key={title} className="card hover:-translate-y-1 hover:shadow-elevated transition-all duration-300 group cursor-pointer">
+            <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${bg} transition-transform duration-300 group-hover:scale-110`}>
+              <Icon className={`h-6 w-6 ${color}`} />
+            </div>
+            <h3 className="mt-5 text-xl font-semibold text-ink-900 dark:text-white">{title}</h3>
+            <p className="mt-2 text-sm text-ink-600 dark:text-ink-400 leading-relaxed">
+              {description}
             </p>
-            <button className="mt-4 text-sm font-medium text-brand-600 hover:text-brand-500">
-              Learn more →
-            </button>
+            <div className="mt-4 text-sm font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-1 transition-all group-hover:gap-2">
+              Learn more <span aria-hidden="true">&rarr;</span>
+            </div>
           </div>
         ))}
       </section>
