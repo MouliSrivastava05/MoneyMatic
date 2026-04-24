@@ -117,9 +117,6 @@ function Home() {
             <p className="mt-2 text-sm text-ink-600 dark:text-ink-400 leading-relaxed">
               {description}
             </p>
-            <div className="mt-4 text-sm font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-1 transition-all group-hover:gap-2">
-              Learn more <span aria-hidden="true">&rarr;</span>
-            </div>
           </div>
         ))}
       </section>
