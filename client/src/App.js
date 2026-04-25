@@ -12,6 +12,8 @@ import AnimatedLogo from "./components/AnimatedLogo";
 import ChartIcon from "./icons/ChartIcon";
 import SearchIcon from "./icons/SearchIcon";
 import BellIcon from "./icons/BellIcon";
+import ShinyText from "./components/react-bits/ShinyText";
+import SpotlightCard from "./components/react-bits/SpotlightCard";
 
 function Home() {
   const navigate = useNavigate();
@@ -35,7 +37,9 @@ function Home() {
 
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-10 lg:flex-row">
         <div className="flex-1 space-y-6">
-          <span className="pill">Personal finance OS</span>
+          <div className="pill">
+            <ShinyText text="Personal finance OS" disabled={false} speed={3} className="custom-class" />
+          </div>
           <h1 className="font-display text-4xl font-semibold tracking-tight text-ink-900 dark:text-white md:text-5xl">
             Sleek budgeting meets intentional spending.
               </h1>
@@ -109,7 +113,7 @@ function Home() {
             bg: 'bg-emerald-500/20 border-emerald-500/30'
           }
         ].map(({ title, description, Icon, color, bg }) => (
-          <div key={title} className="card hover:-translate-y-1 hover:shadow-elevated transition-all duration-300 group cursor-pointer">
+          <SpotlightCard key={title} className="p-6 cursor-pointer" spotlightColor="rgba(20, 184, 166, 0.15)">
             <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${bg} transition-transform duration-300 group-hover:scale-110`}>
               <Icon className={`h-6 w-6 ${color}`} />
             </div>
@@ -117,7 +121,7 @@ function Home() {
             <p className="mt-2 text-sm text-ink-600 dark:text-ink-400 leading-relaxed">
               {description}
             </p>
-          </div>
+          </SpotlightCard>
         ))}
       </section>
     </div>

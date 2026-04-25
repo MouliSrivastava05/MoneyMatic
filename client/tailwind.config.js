@@ -122,6 +122,10 @@ module.exports = {
           '50%':  { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
         },
+        shine: {
+          '0%': { backgroundPosition: '100%' },
+          '100%': { backgroundPosition: '-100%' },
+        },
       },
       animation: {
         subtleIn:           'subtleIn .5s cubic-bezier(0.16,1,0.3,1) both',
@@ -138,6 +142,7 @@ module.exports = {
         'fade-in':          'fadeIn .6s cubic-bezier(0.16,1,0.3,1)',
         'scale-in':         'scaleIn .35s cubic-bezier(0.16,1,0.3,1)',
         gradientShift:      'gradientShift 15s ease infinite',
+        shine:              'shine 3s linear infinite',
       },
     },
   },
